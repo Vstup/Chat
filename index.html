@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            font-size: 28px;
+        }
+        .panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        input {
+            font-size: inherit;
+            width: 100%;
+
+        }
+
+        .inputs {
+            display: flex;
+        }
+
+        .input-left {
+           max-width: 20%;
+        }
+
+        .input-left, input-right {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="messages">
+        <p align="center" id="greeting">Напиши что-нибудь!)</p>
+    </div>
+    <div class="panel">
+        <form  onsubmit = "sendMessage(this.nickname.value, this.message.value); this.message.value = ''; return false;">
+
+            <div class="inputs">
+
+            <div class="input-left">
+                <input type="text" name="nickname" placeholder="nickname" autofocus="" autocomplete="off">
+            </div>
+            <div class="input-right">
+                <input type="text" name="message" placeholder="message" autocomplete="off">
+            </div>
+        </div>
+            <input type="submit" >
+        </form>
+    </div>
+
+    <script>
+        const socket = io({transports: ['websocket']});
+
+        socket.on('broadcast', function (data) {
+            render(data);
+        });
+
+        socket.on('clear1', function () {
+            document.getElementById('messages').innerHTML = '<div></div>';
+        });
+
+        function sendMessage(nickname, message) {
+
+            if (message === 'clear') {
+                socket.emit('clear');
+
+            }
+
+            else if(nickname && message) {
+                socket.emit('message', {nickname: nickname, message: message});
+            }
+
+
+            else {
+                alert('Введите данные!');
+            }
+        };
+
+        const checkHeader = document.getElementById('greeting');
+
+        function render(data) {
+            if (checkHeader.style.display !== 'none') {
+                checkHeader.style.display = 'none';
+            }
+            document.getElementById('messages').innerHTML += '<div>' + data.nickname + ': ' + data.message + '</div>';
+            window.scrollTo(0, document.body.scrollHeight);
+        };
+    </script>
+</body>
+</html>
