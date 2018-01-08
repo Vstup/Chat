@@ -6,7 +6,7 @@ const cookie = require('node-cookie');
 const users = JSON.parse(fs.readFileSync('users.json'));
 const sessions = JSON.parse(fs.readFileSync('sessions.json'));
 
-const addUser = (uname, passwd) => {
+const addUser = (uname, passwd, res) => {
   if (!users[uname]) users[uname] = passwd;
   else res.end('There is an user with such a name');
   fs.writeFileSync('users.json', JSON.stringify(users) );

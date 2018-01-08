@@ -2,15 +2,10 @@
 const http = require('http');
 const fs = require('fs');
 const socketio = require('socket.io');
-//const html = require('escape-html');
 const url = require('url');
 const cookie = require('node-cookie');
-//const token = require('./tokenGenerate');
 const stat = require('node-static');
 const funcs = require('./funcs');
-
-// const users = JSON.parse(fs.readFileSync('users.json'));
-// const sessions = JSON.parse(fs.readFileSync('sessions.json'));
 
 const server = http.createServer();
 const io = socketio(server);
@@ -40,22 +35,21 @@ server.on('request', function (req, res) {
   if (path === '/' || path === '/home' ) {
     console.log('checkSess: ' + funcs.checkSess(req));
     if ( !funcs.checkSess(req) ) {
-      // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+      res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
       res.end(fs.readFileSync('login.html'));
 
-      //}
     } else {
-      // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+      res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
       res.end(fs.readFileSync('public/index.html'));
     }}
 
   if (path ==='/registration'){
-    // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+    res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
     res.end(fs.readFileSync('registration.html'));
   }
 
   if (path ==='/login'){
-    // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+    res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
     res.end(fs.readFileSync('login.html'));
   }
 
