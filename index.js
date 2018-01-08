@@ -16,6 +16,10 @@ const server = http.createServer();
 const io = socketio(server);
 const port = 8082;
 
+const fileServer = new stat.Server( './public/', {
+    cache: 3600,
+    gzip: true
+} );
 
 
     io.on('connection', function (socket) {
@@ -42,7 +46,7 @@ const port = 8082;
                 //}
             } else {
                 res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-                res.end(fs.readFileSync('index.html'))
+                res.end(fs.readFileSync('public/index.html'))
             }}
 
         if (path ==='/registration'){
@@ -71,7 +75,7 @@ const port = 8082;
                 if (!accsses) res.end('wrong');
                 else {
                     funcs.userSessionCreate(uname, res);
-                    res.end(fs.readFileSync('index.html'));
+                    res.end(fs.readFileSync('public/index.html'));
                 }
             }
 
@@ -79,13 +83,18 @@ const port = 8082;
                 funcs.addUser(uname, pass);
                 funcs.newUserSession(uname);
                 funcs.userSessionCreate(uname, res);
-                res.end(fs.readFileSync('index.html'));
+                res.end(fs.readFileSync('public/index.html'));
             }
 
         }
+
+        req.addListener( 'end', function () {
+            fileServer.serve( req, res );
+        } ).resume();
 
     });
 
     server.listen(port, function () {
         console.log('Server running')
     });
+
