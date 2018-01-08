@@ -8,7 +8,8 @@
     <script>
 
         const singUp = () => {
-            location.href = 'http://localhost:8082/registration';
+//            location.href = 'http://localhost:8082/registration';
+            location.href = '/registration';
         };
 
         const login = () => {
@@ -21,7 +22,8 @@
                     if (this.responseText === 'wrong') alert('wrong uname or pass');
                     document.getElementById('uname').value = '';
                     document.getElementById('pass').value = '';
-                    location.href = 'http://localhost:8082/home';
+//                    location.href = 'http://localhost:8082/home';
+                    location.href = '/home';
                 }
             };
 
