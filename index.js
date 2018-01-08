@@ -3,7 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const socketio = require('socket.io');
 const url = require('url');
-const cookie = require('node-cookie');
+const cookie = require('./node-cookie/index');
 const stat = require('./node-static/node-static');
 const funcs = require('./funcs');
 
