@@ -1,0 +1,124 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "node-cookie",
+        "scope": null,
+        "escapedName": "node-cookie",
+        "name": "node-cookie",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/mhnatyshyn"
+    ]
+  ],
+  "_from": "node-cookie@latest",
+  "_id": "node-cookie@2.0.2",
+  "_inCache": true,
+  "_location": "/node-cookie",
+  "_nodeVersion": "8.0.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/node-cookie-2.0.2.tgz_1502826919814_0.5292497659102082"
+  },
+  "_npmUser": {
+    "name": "virk",
+    "email": "virk@adonisjs.com"
+  },
+  "_npmVersion": "5.3.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "node-cookie",
+    "scope": null,
+    "escapedName": "node-cookie",
+    "name": "node-cookie",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-cookie/-/node-cookie-2.0.2.tgz",
+  "_shasum": "0316bbedf657068132e332365607dc9884bf7372",
+  "_shrinkwrap": null,
+  "_spec": "node-cookie",
+  "_where": "/home/mhnatyshyn",
+  "author": {
+    "name": "amanvirk"
+  },
+  "bugs": {
+    "url": "https://github.com/poppinss/node-cookie/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "cookie": "^0.3.1",
+    "cookie-signature": "^1.0.6",
+    "simple-encryptor": "^1.1.0"
+  },
+  "description": "sign, encrypt and parse http cookies",
+  "devDependencies": {
+    "coveralls": "^2.13.1",
+    "cz-conventional-changelog": "^2.0.0",
+    "japa": "^1.0.3",
+    "japa-cli": "^1.0.1",
+    "lodash": "^4.17.4",
+    "nyc": "^11.0.2",
+    "standard": "^10.0.2",
+    "supertest": "^3.0.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dist": {
+    "integrity": "sha512-BlQ5riXNu0lL2SC1X9AYshSR/jHFbIF5AfPv9mwJ2z7zH2smwkZeIPfnVMZJdrUk3Ta6y2Rqr1+KnIEjZK1nvg==",
+    "shasum": "0316bbedf657068132e332365607dc9884bf7372",
+    "tarball": "https://registry.npmjs.org/node-cookie/-/node-cookie-2.0.2.tgz"
+  },
+  "gitHead": "2eb06a69a969b0dd095d2fce654c5353a8616e38",
+  "homepage": "https://github.com/poppinss/node-cookie#readme",
+  "keywords": [
+    "cookies",
+    "cookie-parser",
+    "signed-cookies"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "virk",
+      "email": "virk@adonisjs.com"
+    },
+    {
+      "name": "amanvirk",
+      "email": "virk.officials@gmail.com"
+    }
+  ],
+  "name": "node-cookie",
+  "nyc": {
+    "include": [
+      "src"
+    ]
+  },
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poppinss/node-cookie.git"
+  },
+  "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "standard",
+    "posttest": "npm run coverage",
+    "pretest": "npm run lint",
+    "test": "nyc npm run test:local",
+    "test:local": "FORCE_COLOR=true node bin/index.js --local",
+    "test:win": "set FORCE_COLOR=true && node bin/index.js --win"
+  },
+  "version": "2.0.2"
+}
