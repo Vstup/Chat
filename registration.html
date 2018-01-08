@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>registration</title>
+    <script>
+        const singUp = () => {
+            const uname = document.getElementById('uname').value;
+            const pass = document.getElementById('pass').value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById('uname').value = '';
+                    document.getElementById('pass').value = '';
+                    location.href = 'http://localhost:8082/home';
+                }
+            };
+
+            xhr.open('POST', 'main.js?uname=' + uname + '&pass=' + pass, true);
+            xhr.setRequestHeader('cause', 'register');
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+<form>
+    <input type="text" id="uname">
+    <input type="password" id="pass">
+</form>
+<br>
+<button onclick="singUp()">Log In</button>
+<br>
+<br>
+<br>
+<a href="/login"><button>Log In</button></a>
+
+</body>
+</html>

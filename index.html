@@ -40,17 +40,23 @@
     </style>
 </head>
 <body>
+
+<h1>Hello</h1>
+<button onclick="singOut()">Sing Out</button>
+
     <div id="messages">
         <p align="center" id="greeting">Напиши что-нибудь!)</p>
     </div>
     <div class="panel">
-        <form  onsubmit = "sendMessage(this.nickname.value, this.message.value); this.message.value = ''; return false;">
+        <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false;">
 
             <div class="inputs">
 
+<!--
             <div class="input-left">
                 <input type="text" name="nickname" placeholder="nickname" autofocus="" autocomplete="off">
             </div>
+-->
             <div class="input-right">
                 <input type="text" name="message" placeholder="message" autocomplete="off">
             </div>
@@ -60,6 +66,26 @@
     </div>
 
     <script>
+        function getCookie() {
+            const   matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + 'user'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        const singOut = () => {
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    location.href = 'http://localhost:8082/login';
+                }
+            };
+            xhr.open('POST', '/logout', true);
+            xhr.send();
+        };
+
         const socket = io({transports: ['websocket']});
 
         socket.on('broadcast', function (data) {
