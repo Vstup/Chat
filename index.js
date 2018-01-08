@@ -4,7 +4,7 @@ const fs = require('fs');
 const socketio = require('socket.io');
 const url = require('url');
 const cookie = require('node-cookie');
-const stat = require('node-static');
+const stat = require('./node-static/node-static');
 const funcs = require('./funcs');
 
 const server = http.createServer();
