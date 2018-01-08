@@ -1,7 +1,7 @@
 'use strict';
 const fs = require ('fs');
 const token = require('./tokenGenerate');
-const cookie = require('node-cookie');
+const cookie = require('./node-cookie/index');
 
 const users = JSON.parse(fs.readFileSync('users.json'));
 const sessions = JSON.parse(fs.readFileSync('sessions.json'));
