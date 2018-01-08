@@ -9,7 +9,7 @@ const funcs = require('./funcs');
 
 const server = http.createServer();
 const io = socketio(server);
-const port = 8082;
+const port = 8080;
 
 const fileServer = new stat.Server( './public/', {
   cache: 3600,
