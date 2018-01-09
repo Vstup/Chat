@@ -1,29 +1,110 @@
-body {
+html, body {
     margin: 0;
-    font-size: 28px;
+    background-color: coral;
+    height: 100%;
 }
+
+.main {
+    width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.header {
+    text-align: center;
+    height: 40px;
+}
+
+.brand {
+    padding-top: 15px;
+    margin: 0;
+}
+
+.center {
+}
+
+#left, #right {
+    float: left;
+}
+
+#left {
+    width: 300px;
+    background-color: #505d71;
+    height: 100%;
+    border-bottom-left-radius: 10px;
+}
+
+#right {
+    width: 600px;
+}
+
+#chat {
+
+}
+
+.chat-header {
+    border: 3px solid #cfdae1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    font-weight: bold;
+    color: #333f4d;
+}
+
+.input-message, .button {
+    float: left;
+    display: block;
+}
+
+.input {
+    width: 395px;
+    border: 0;
+    height: 40px;
+    margin: 0 50px;
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+.submit {
+    width: 80px;
+    border: 0;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #a0b4c0;
+}
+
+#left-up {
+
+}
+
+#left-down {
+    height: 60px;
+    background-color: #445166;
+    border-bottom-left-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.u-name {
+    padding-top: 20px;
+    margin: 0;
+}
+
+.message {
+    height: 60px;
+    background-color: #e4eaee;
+
+}
+
 .panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
-input {
-    font-size: inherit;
-    width: 100%;
-
+    vertical-align: middle;
+    padding-top: 10px;
 }
 
-.inputs {
-    display: flex;
-}
+#messages {
+    overflow: auto;
+    padding-left: 10px;
 
-.input-left {
-    max-width: 20%;
-}
-
-.input-left, input-right {
-    flex-grow: 1;
 }
