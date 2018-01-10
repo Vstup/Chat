@@ -60,13 +60,13 @@
 
 
 <script>
-    var height = document.documentElement.clientHeight;
+    const height = document.documentElement.clientHeight;
     document.getElementById('left').style.height = height - 40 + "px";
     document.getElementById('right').style.height = height -40 + "px";
     document.getElementById('chat').style.height = height - 100 + "px";
     document.getElementById('left-up').style.height = height - 100 + "px";
     document.getElementById('messages').style.height = height - 144 + "px";
-    var block = document.getElementById('messages');
+    const block = document.getElementById('messages');
 
     function scrolldown() {
         block.scrollTop = block.scrollHeight;
@@ -86,7 +86,7 @@
 
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                location.href = 'http://localhost:8082/login';
+                location.href = '/login';
             }
         };
         xhr.open('POST', '/logout', true);

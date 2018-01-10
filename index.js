@@ -20,6 +20,8 @@ const fileServer = new stat.Server( './public/', {
 io.on('connection', function (socket) {
   socket.on('message', function (data) {
     io.emit('broadcast', data);
+
+    funcs.messageLog(data.nickname,'000',data.message)
     console.log(data);
   });
   socket.on('clear', function () {
@@ -28,6 +30,7 @@ io.on('connection', function (socket) {
 });
 
 server.on('request', function (req, res) {
+
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path);

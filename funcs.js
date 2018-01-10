@@ -75,6 +75,30 @@ const checkSess = (req) => {
 };
 
 
+const messageLog = (user,chatId,text)=>{
+  const obj = {};
+  obj.messId = token.generateSessId;
+  obj.chatId = chatId;
+  obj.userSent = user;
+  obj.userSentId =getSessID(user);
+  obj.timeString = new Date().toISOString();
+  obj.messText = text;
+  const messages = JSON.parse(fs.readFileSync('./messages.json'));
+  messages.push(obj);
+  fs.writeFileSync('./messages.json',JSON.stringify(messages));
+};
+
+const createChat = (user1, user2) => {
+  const obj = {};
+  const id1 = getSessID(user1);
+  const id2 = getSessID(user2);
+  obj.chatId = '' + id1 + id2;
+  obj.users = [user1,user2];
+  obj.usersId = [id1,id2];
+  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+  chats.push(obj);
+  fs.writeFileSync('./chats.json',JSON.stringify(chats));
+};
 
 module.exports = {
   checkSess,
@@ -84,4 +108,7 @@ module.exports = {
   userSessionCreate,
   userSessionDelete,
   checkPass,
-  addUser};
+  addUser,
+  messageLog,
+  createChat
+};
