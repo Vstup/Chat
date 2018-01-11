@@ -4,12 +4,124 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="styles/style.css" type="text/css">
+    <!--<link rel="stylesheet" href="styles/style.css" type="text/css">-->
 
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TFP</title>
+    <style>
+        html, body {
+            margin: 0;
+            background-color: coral;
+            height: 100%;
+        }
+
+        .main {
+            width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        .header {
+            text-align: center;
+            height: 40px;
+        }
+
+        .brand {
+            padding-top: 15px;
+            margin: 0;
+        }
+
+        .center {
+        }
+
+        #left, #right {
+            float: left;
+        }
+
+        #left {
+            width: 300px;
+            background-color: #505d71;
+            height: 100%;
+            border-bottom-left-radius: 10px;
+        }
+
+        #right {
+            width: 600px;
+        }
+
+        #chat {
+
+        }
+
+        .chat-header {
+            border: 3px solid #cfdae1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            font-weight: bold;
+            color: #333f4d;
+        }
+
+        .input-message, .button {
+            float: left;
+            display: block;
+        }
+
+        .input {
+            width: 395px;
+            border: 0;
+            height: 40px;
+            margin: 0 50px;
+            border-radius: 5px;
+            padding-left: 5px;
+        }
+
+        .submit {
+            width: 80px;
+            border: 0;
+            height: 40px;
+            border-radius: 5px;
+            background-color: #a0b4c0;
+        }
+
+        #left-up {
+
+        }
+
+        #left-down {
+            height: 60px;
+            background-color: #445166;
+            border-bottom-left-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .u-name {
+            padding-top: 20px;
+            margin: 0;
+        }
+
+        .message {
+            height: 60px;
+            background-color: #e4eaee;
+
+        }
+
+        .panel {
+            vertical-align: middle;
+            padding-top: 10px;
+        }
+
+        #messages {
+            overflow: auto;
+            padding-left: 10px;
+
+        }
+    </style>
 
 </head>
 <body>
@@ -20,6 +132,17 @@
         <div id="left">
             <div id="left-up">
                 <button onclick="singOut()">Sing Out</button>
+
+
+
+                ***USER LIST HERE***
+
+                <hr>
+
+                ***USER CHATS HERE***
+
+
+
             </div>
             <div id="left-down">
                 <p class="u-name">User name</p>
@@ -79,6 +202,26 @@
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
+
+//    document.addEventListener("DOMContentLoaded", userAndChatList());
+//    userAndChatList();
+    const chat = (user2) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const data = JSON.parse(this.responseText);
+               document.getElementById("left-up").innerHTML = '<button onclick="singOut()">Sing Out</button>' +
+                       data[0] + '<hr>' + data[1];
+
+
+            }
+        };
+        xhr.open('POST', '/index.js?uname='+user2, true);
+        xhr.setRequestHeader('cause', 'chatCreate');
+        xhr.send();
+
+    };
 
     const singOut = () => {
 

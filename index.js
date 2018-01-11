@@ -46,7 +46,7 @@ server.on('request', function (req, res) {
 
     } else {
       res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-      res.end(fs.readFileSync('public/index.html'));
+      res.end(funcs.generatePage(req));
     }}
 
   if (path ==='/registration'){
@@ -64,6 +64,8 @@ server.on('request', function (req, res) {
     funcs.userSessionDelete(uname, res);
     res.end();
   }
+
+
 
   if (data) {
     const uname = data.uname;
@@ -86,12 +88,22 @@ server.on('request', function (req, res) {
       res.end(fs.readFileSync('public/index.html'));
     }
 
+    if (cause === 'chatCreate') {
+      const user1 = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
+      funcs.createChat(user1, uname);
+      const result = [];
+      const userLi = funcs.generateUserLi(req);
+      const chatLi = funcs.generateChatLi(req);
+      result.push(userLi);
+      result.push(chatLi);
+      res.end(JSON.stringify(result));
+    }
+
   }
 
-  req.addListener( 'end', function () {
+ /* req.addListener( 'end', function () {
     fileServer.serve( req, res );
-  } ).resume();
-
+  } ).resume();*/
 });
 
 server.listen(port, function () {

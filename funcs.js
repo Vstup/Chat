@@ -51,7 +51,7 @@ const newUserSession = (uname) => {
   fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
 };
 
-const getUser = () => {
+const getUser = (req) => {
   const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
   return user;
 };
@@ -121,6 +121,67 @@ const getChatList = (user) => {
   return res;
 };
 
+const getChatUser = (user) => {
+    const res = [];
+    const id = getSessID(user);
+    const chats = JSON.parse(fs.readFileSync('./chats.json'));
+    for (let i = 0;i < chats.length;i++){
+        if (chats[i].users[0] === user || chats[i].users[1] === user){
+            res.push(chats[i].users[1])
+        }
+    }
+    return res;
+};
+
+const chatCheck = (user) => {
+  let flag = false;
+  const res = [];
+  const users = getUserList();
+  const chats = getChatUser(user);
+  for (let i = 0; i < users.length; i++){
+    for (let j = 0;j < chats.length; j++){
+        if (users[i]===chats[j]) {
+          flag = true;
+        }
+    }
+    if (flag === false) {
+      res.push(users[i])
+    };
+      flag = false;
+  }
+  return res;
+};
+
+const generatePage= (req) => {
+    let page = fs.readFileSync('public/index.html').toString();
+    const userLi = generateUserLi(req);
+    page = page.replace('***USER LIST HERE***', userLi);
+
+    const chatLi = generateChatLi(req);
+    page = page.replace('***USER CHATS HERE***', chatLi);
+    return page
+};
+
+const generateUserLi = (req) => {
+    const users = chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
+    let userLi = '<ul>';
+    for (let i = 0; i < users.length;i++){
+        userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
+    }
+    userLi += '</ul>';
+    return userLi
+};
+
+const generateChatLi = (req) => {
+    const chats = getChatList(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
+    const chatUser = getChatUser(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
+    let chatLi = '<ul>';
+    for (let i = 0; i < chats.length;i++){
+        chatLi += '<li>' + chatUser[i] + '     <button onclick="goToChat(\'' + chats[i] + '\')">Open a chat</button></li>\n';
+    }
+    chatLi += '</ul>';
+    return chatLi;
+};
 
 module.exports = {
   checkSess,
@@ -135,5 +196,8 @@ module.exports = {
   createChat,
   getUserList,
   getChatList,
-  clearMessages
+  clearMessages,
+  generatePage,
+  generateUserLi,
+  generateChatLi
 };
