@@ -100,6 +100,28 @@ const createChat = (user1, user2) => {
   fs.writeFileSync('./chats.json',JSON.stringify(chats));
 };
 
+const getUserList = () =>{
+  const users = JSON.parse(fs.readFileSync('./users.json'))
+  return Object.keys(users);
+};
+
+const clearMessages = () => {
+  fs.writeFileSync('./messages.json','[]');
+};
+
+const getChatList = (user) => {
+  const res = [];
+  const id = getSessID(user);
+  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+  for (let i = 0;i < chats.length;i++){
+    if (chats[i].users[0] === user || chats[i].users[1] === user){
+      res.push(chats[i].chatId)
+    }
+  }
+  return res;
+};
+
+
 module.exports = {
   checkSess,
   getUser,
@@ -110,5 +132,8 @@ module.exports = {
   checkPass,
   addUser,
   messageLog,
-  createChat
+  createChat,
+  getUserList,
+  getChatList,
+  clearMessages
 };

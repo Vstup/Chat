@@ -31,6 +31,9 @@ io.on('connection', function (socket) {
 
 server.on('request', function (req, res) {
 
+
+
+
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path);
