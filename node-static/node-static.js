@@ -122,7 +122,7 @@ Server.prototype.finish = function (status, headers, req, res, promise, callback
         // Don't end the request here, if we're streaming;
         // it's taken care of in `prototype.stream`.
         if (status !== 200 || req.method !== 'GET') {
-            res.writeHead(status, headers);
+            // res.writeHead(status, headers);
             res.end();
         }
         callback && callback(null, result);

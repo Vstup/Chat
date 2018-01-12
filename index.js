@@ -22,7 +22,7 @@ io.on('connection', function (socket) {
     io.emit('broadcast', data);
 
     funcs.messageLog(data.nickname,data.chatId,data.message);
-    console.log(data);
+    //console.log(data);
   });
   socket.on('clear', function () {
     io.emit('clear1' );
@@ -67,7 +67,7 @@ server.on('request', function (req, res) {
 
 
 
-  if (data) {
+  if (data && funcs.checkSess(req)) {
     const uname = data.uname;
     const pass = data.pass;
     const cause = req.headers.cause;
@@ -107,7 +107,7 @@ server.on('request', function (req, res) {
 
   }
 
- /* req.addListener( 'end', function () {
+  /* req.addListener( 'end', function () {
     fileServer.serve( req, res );
   } ).resume();*/
 });

@@ -6,6 +6,8 @@ const cookie = require('./node-cookie/index');
 const users = JSON.parse(fs.readFileSync('users.json'));
 const sessions = JSON.parse(fs.readFileSync('sessions.json'));
 
+
+
 const addUser = (uname, passwd, res) => {
   if (!users[uname]) users[uname] = passwd;
   else res.end('There is an user with such a name');
@@ -57,22 +59,20 @@ const getUser = (req) => {
 };
 
 const checkSess = (req) => {
-  if (cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1')) {
-    const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
-    const sessId = getSessID(user);
-    // console.log('user: ' + user);
-    // console.log('sessId: ' + sessId);
-      if (!sessions[sessId]) return false;
-    if (sessions[sessId].active === true){
-      const sysTok = sessions[sessId].token;
-      const userTok = cookie.get(req, 'token', 'Hd1eR7v12SdfSGc1');
-      // console.log('active: ' + sessions[sessId].active);
-      // console.log('sysTok: ' + sysTok);
-      // console.log('userTok: ' + userTok);
-      if (sysTok === userTok){return true;}else return false;
-    }else return false;
-  } else return false;
+  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
 
+  if (user) {
+    const sessId = getSessID(user);
+
+    if (!sessions[sessId]) return false;
+
+    const sysTok = sessions[sessId].token;
+    const userTok = cookie.get(req, 'token', 'Hd1eR7v12SdfSGc1');
+
+    if (sessions[sessId].active === true && sysTok === userTok)return true;
+  }
+
+  return false;
 };
 
 
@@ -102,7 +102,7 @@ const createChat = (user1, user2) => {
 };
 
 const getUserList = () =>{
-  const users = JSON.parse(fs.readFileSync('./users.json'))
+  const users = JSON.parse(fs.readFileSync('./users.json'));
   return Object.keys(users);
 };
 
@@ -112,28 +112,32 @@ const clearMessages = () => {
 
 const getChatList = (user) => {
   const res = [];
-  const id = getSessID(user);
+  //const id = getSessID(user);
   const chats = JSON.parse(fs.readFileSync('./chats.json'));
+
   for (let i = 0;i < chats.length;i++){
     if (chats[i].users[0] === user || chats[i].users[1] === user){
-      res.push(chats[i].chatId)
+      res.push(chats[i].chatId);
     }
   }
+
   return res;
 };
 
 const getChatUser = (user) => {
-    const res = [];
-    const id = getSessID(user);
-    const chats = JSON.parse(fs.readFileSync('./chats.json'));
-    for (let i = 0;i < chats.length;i++){
-        if (chats[i].users[0] === user ){
-            res.push(chats[i].users[1])
-        }else if (chats[i].users[1] === user){
-            res.push(chats[i].users[0])
-        }
+  const res = [];
+  //const id = getSessID(user);
+  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+
+  for (let i = 0;i < chats.length;i++){
+    if (chats[i].users[0] === user ){
+      res.push(chats[i].users[1]);
+    }else if (chats[i].users[1] === user){
+      res.push(chats[i].users[0]);
     }
-    return res;
+  }
+
+  return res;
 };
 
 const chatCheck = (user) => {
@@ -141,60 +145,71 @@ const chatCheck = (user) => {
   const res = [];
   const users = getUserList();
   const chats = getChatUser(user);
+
   for (let i = 0; i < users.length; i++){
     for (let j = 0;j < chats.length; j++){
-        if (users[i]===chats[j]) {
-          flag = true;
-        }
+      if (users[i]===chats[j]) {
+        flag = true;
+      }
     }
     if (flag === false) {
-      res.push(users[i])
-    };
-      flag = false;
+      res.push(users[i]);
+    }
+    flag = false;
   }
   return res;
 };
 
 const generatePage= (req) => {
-    let page = fs.readFileSync('public/index.html').toString();
-    const userLi = generateUserLi(req);
-    page = page.replace('***USER LIST HERE***', userLi);
+  let page = fs.readFileSync('public/index.html').toString();
 
-    const chatLi = generateChatLi(req);
-    page = page.replace('***USER CHATS HERE***', chatLi);
-    return page
+  const userLi = generateUserLi(req);
+  page = page.replace('***USER LIST HERE***', userLi);
+
+  const chatLi = generateChatLi(req);
+  page = page.replace('***USER CHATS HERE***', chatLi);
+
+  return page;
 };
 
 const generateUserLi = (req) => {
-    const users = chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
-    let userLi = '<ul>';
-    for (let i = 0; i < users.length;i++){
-        userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
-    }
-    userLi += '</ul>';
-    return userLi
+  const users = chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
+  let userLi = '<ul>';
+
+  for (let i = 0; i < users.length;i++){
+    userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
+  }
+
+  userLi += '</ul>';
+
+  return userLi;
 };
 
 const generateChatLi = (req) => {
-    const chats = getChatList(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
-    const chatUser = getChatUser(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
-    let chatLi = '<ul>';
-    for (let i = 0; i < chats.length;i++){
-        chatLi += '<li>' + chatUser[i] + '     <button onclick="goToChat(\'' + chats[i] + '\')">Open a chat</button></li>\n';
-    }
-    chatLi += '</ul>';
-    return chatLi;
+  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
+  const chats = getChatList(user);
+  const chatUser = getChatUser(user);
+  let chatLi = '';
+
+  for (let i = 0; i < chats.length;i++){
+    chatLi += '<div class="chatContainer" id="'+ chats[i] +'" onclick="goToChat(\'' + chats[i] + '\')"><br>' + chatUser[i] + '</div>' ;
+  }
+
+
+  return chatLi;
 };
 
 const getMessagesFromChat = (chatId) => {
-    const result = [];
-    const messages = JSON.parse(fs.readFileSync('./messages.json'));
-    for (let i = 0; i < messages.length;i++){
-        if (messages[i].chatId === chatId){
-            result.push(messages[i]);
-        }
+  const result = [];
+  const messages = JSON.parse(fs.readFileSync('./messages.json'));
+
+  for (let i = 0; i < messages.length;i++){
+    if (messages[i].chatId === chatId){
+      result.push(messages[i]);
     }
-    return result;
+  }
+
+  return result;
 };
 
 module.exports = {
