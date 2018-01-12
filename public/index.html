@@ -286,8 +286,10 @@
 
 
     function render(data) {
-        document.getElementById('messages').innerHTML += '<div>' + data.nickname + ': ' + data.message + '</div>';
-        window.scrollTo(0, document.body.scrollHeight);
+        if (data.chatId === currentChat) {
+            document.getElementById('messages').innerHTML += '<div>' + data.nickname + ': ' + data.message + '</div>';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
     };
 </script>
 </body>

@@ -62,6 +62,7 @@ const checkSess = (req) => {
     const sessId = getSessID(user);
     // console.log('user: ' + user);
     // console.log('sessId: ' + sessId);
+      if (!sessions[sessId]) return false;
     if (sessions[sessId].active === true){
       const sysTok = sessions[sessId].token;
       const userTok = cookie.get(req, 'token', 'Hd1eR7v12SdfSGc1');
