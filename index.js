@@ -21,7 +21,7 @@ io.on('connection', function (socket) {
   socket.on('message', function (data) {
     io.emit('broadcast', data);
 
-    funcs.messageLog(data.nickname,'000',data.message)
+    funcs.messageLog(data.nickname,data.chatId,data.message);
     console.log(data);
   });
   socket.on('clear', function () {
@@ -96,6 +96,12 @@ server.on('request', function (req, res) {
       const chatLi = funcs.generateChatLi(req);
       result.push(userLi);
       result.push(chatLi);
+      res.end(JSON.stringify(result));
+    }
+
+    if (cause === 'chatOpen') {
+      const chatId = data.chatId;
+      const result = funcs.getMessagesFromChat(chatId);
       res.end(JSON.stringify(result));
     }
 

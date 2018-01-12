@@ -196,12 +196,14 @@
     }
 </script>
 <script>
+
+    let currentChat = '';
     function getCookie() {
         const   matches = document.cookie.match(new RegExp(
             "(?:^|; )" + 'user'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
+    };
 
 //    document.addEventListener("DOMContentLoaded", userAndChatList());
 //    userAndChatList();
@@ -221,6 +223,28 @@
         xhr.setRequestHeader('cause', 'chatCreate');
         xhr.send();
 
+    };
+
+    const goToChat = (chatId) => {
+        currentChat = chatId;
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const data = JSON.parse(this.responseText);
+                let res = '';
+                for (let i = 0; i<data.length;i++){
+                    res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
+                }
+                document.getElementById('messages').innerHTML = res;
+                window.scrollTo(0, document.body.scrollHeight);
+
+
+            }
+        };
+        xhr.open('POST', '/index.js?chatId='+chatId, true);
+        xhr.setRequestHeader('cause', 'chatOpen');
+        xhr.send();
     };
 
     const singOut = () => {
@@ -255,7 +279,7 @@
         }
 
         else if(nickname && message) {
-            socket.emit('message', {nickname: nickname, message: message});
+            socket.emit('message', {nickname: nickname, message: message, chatId: currentChat});
         }
 
     };

@@ -126,8 +126,10 @@ const getChatUser = (user) => {
     const id = getSessID(user);
     const chats = JSON.parse(fs.readFileSync('./chats.json'));
     for (let i = 0;i < chats.length;i++){
-        if (chats[i].users[0] === user || chats[i].users[1] === user){
+        if (chats[i].users[0] === user ){
             res.push(chats[i].users[1])
+        }else if (chats[i].users[1] === user){
+            res.push(chats[i].users[0])
         }
     }
     return res;
@@ -183,6 +185,17 @@ const generateChatLi = (req) => {
     return chatLi;
 };
 
+const getMessagesFromChat = (chatId) => {
+    const result = [];
+    const messages = JSON.parse(fs.readFileSync('./messages.json'));
+    for (let i = 0; i < messages.length;i++){
+        if (messages[i].chatId === chatId){
+            result.push(messages[i]);
+        }
+    }
+    return result;
+};
+
 module.exports = {
   checkSess,
   getUser,
@@ -199,5 +212,6 @@ module.exports = {
   clearMessages,
   generatePage,
   generateUserLi,
-  generateChatLi
+  generateChatLi,
+  getMessagesFromChat
 };
