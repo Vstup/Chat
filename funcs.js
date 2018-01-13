@@ -194,8 +194,6 @@ const generateChatLi = (req) => {
   }
 
 
-
-
   return chatLi;
 };
 
