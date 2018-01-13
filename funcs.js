@@ -219,7 +219,6 @@ const getChatId = (user1, user2) => {
             res = chats[i].chatId;
         }
     }
-
     return res;
 };
 
