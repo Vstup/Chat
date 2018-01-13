@@ -88,6 +88,7 @@ server.on('request', function (req, res) {
       res.end(fs.readFileSync('public/index.html'));
     }
 
+
     if (cause === 'chatCreate') {
       const user1 = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
       funcs.createChat(user1, uname);
