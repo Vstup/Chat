@@ -186,15 +186,16 @@ function sendMessage(nickname, message) {
 
 }
 
-
 function render(data) {
-  if (data.chatId === currentChat) {
-    if (data.nickname == nameCheck) {
-      document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';
-    } else {
-      document.getElementById('messages').innerHTML += '<div id="left-message">' + '<span class="message-decor">' + data.message + '</span>' + '</div>';
+    if (data.chatId === currentChat) {
+        if (data.nickname == nameCheck) {
+            soundClick();
+            document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';
+        } else {
+            soundClick();
+            document.getElementById('messages').innerHTML += '<div id="left-message">' + '<span class="message-decor">' + data.message + '</span>' + '</div>';
+        };
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
-    window.scrollTo(0, document.body.scrollHeight);
-  }
-}
+};
