@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <meta charset="UTF-8">
+
+    <!--<link rel="stylesheet" href="styles/style.css" type="text/css">-->
+    <!--<script src="./scripts/common.js"></script>-->
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TFP</title>
+    <style>
+        html, body {
+            margin: 0;
+            background-color: coral;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .main {
+            width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            height: 100%;
+
+        }
+
+        .header {
+            text-align: center;
+            height: 40px;
+        }
+
+        .brand {
+            padding-top: 15px;
+            margin: 0;
+        }
+
+        .center {
+        }
+
+        #left, #right, #rightBefore {
+            float: left;
+        }
+
+        #left {
+            width: 300px;
+            background-color: #505d71;
+            height: 100%;
+            border-bottom-left-radius: 10px;
+        }
+
+        #right {
+            width: 600px;
+        }
+
+        #rightBefore {
+            text-align: center;
+            width: 600px;
+            border-top: 1px solid #505d71;
+
+        }
+
+        #chat {
+
+        }
+
+        .chat-header {
+            border: 3px solid #cfdae1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            font-weight: bold;
+            color: #333f4d;
+        }
+
+        .input-message, .button {
+            float: left;
+            display: block;
+        }
+
+        .input {
+            width: 395px;
+            border: 0;
+            height: 40px;
+            margin: 0 50px;
+            border-radius: 5px;
+            padding-left: 5px;
+        }
+
+        .submit {
+            width: 80px;
+            border: 0;
+            height: 40px;
+            border-radius: 5px;
+            background-color: #a0b4c0;
+        }
+
+        #left-up {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #left-down {
+            height: 60px;
+            background-color: #445166;
+            border-bottom-left-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        #u-name {
+            padding-top: 20px;
+            margin: 0;
+        }
+
+        .message {
+            height: 60px;
+            background-color: #e4eaee;
+
+        }
+
+        .panel {
+            vertical-align: middle;
+            padding-top: 10px;
+        }
+
+        #messages {
+            overflow: auto;
+            padding-left: 10px;
+
+        }
+
+        #startMess {
+            font-weight: 300;
+            align-self: center;
+            margin-top: 50%;
+            width: 44%;
+            padding: 1.3%;
+            border-radius: 10px;
+            background-color: #a0b4c0;
+            margin-left: 28%;
+        }
+
+        .chatContainer {
+            margin: 0px;
+            width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
+            height: 75px;
+            cursor: pointer;
+            text-align: center;
+            font-size: large;
+        }
+
+        .chatContainer:hover {
+            background-color: #e4eaee;
+        }
+
+        #searchContainer{
+            margin: 0px;
+            width: 100%;
+            border-bottom: 1px solid gray;
+            height: 50px;
+        }
+
+        #searchField{
+            margin-top: 5%;
+            margin-left: 6%;
+            padding: 1%;
+            width: 85%;
+
+        }
+
+        #searchRes {
+            display: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .searchedItemContainer{
+            margin: 0px;
+            width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
+            height: 50px;
+            cursor: pointer;
+            text-align: center;
+            font-size: large;
+        }
+
+        .searchedItemContainer:hover {
+            background-color: #e4eaee;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="main">
+    <div class="header"><p class="brand">
+        <button onclick="singOut()" style="float: left;">Sing Out</button>Telegram for poor</p></div>
+    <div class="center">
+        <div id="left">
+
+            <div id="searchContainer">
+            <input type="text" id="searchField" onkeyup="search(this.value)" placeholder="search users...">
+            </div>
+            <hr>
+
+            <div id="searchRes">
+            <p>No users found</p>
+            </div>
+
+            <div id="left-up">
+
+                <!--***USER LIST HERE***-->
+
+                <!--<hr>-->
+
+                ***USER CHATS HERE***
+
+
+
+            </div>
+            <div id="left-down">
+                <p id="u-name">User name</p>
+            </div>
+
+        </div>
+        <div id="rightBefore" >
+            <p id="startMess">Please select a chat to start messaging</p>
+        </div>
+        <div id="right" style="display: none">
+            <div id="chat">
+                <div class="chat-header">Chat</div>
+                <div id="messages">Messages here</div>
+            </div>
+            <div class="message">
+                <div class="panel">
+                    <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false; ">
+                        <div class="input-message">
+                            <input type="text" name="message" placeholder="message" autocomplete="off" class="input">
+                        </div>
+                        <div class="button">
+                            <input type="submit" class="submit" value="Send">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    'use strict';
+<script>
+    let userLi;
+    function getUserLi(value,callback) {
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                userLi = JSON.parse(this.responseText);
+                console.log('touched')
+                callback(value);
+            }
+        };
+        xhr.open('GET', '/index.js?uname=', true);
+        xhr.setRequestHeader('cause', 'search');
+        xhr.send();
+
+    }
+
+    function serchRes(value) {
+        let res = '';
+        if (value === '') {
+            document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
+            document.getElementById('left-up').style.display = 'block';
+            document.getElementById('searchRes').style.display = 'none';
+        } else {
+
+        for (let i = 0; i < userLi.length; i++) {
+            if (userLi[i].indexOf(value) === 0) {
+                res += '<div class="searchedItemContainer" ' +
+                    'onclick="chat(\'' + userLi[i] + '\')">' + userLi[i] + '</div>\n'
+            }
+        }
+        document.getElementById('searchRes').innerHTML = res;
+        document.getElementById('left-up').style.display = 'none';
+        document.getElementById('searchRes').style.display = 'block';
+    }
+    }
+
+    function search(value) {
+        if (!userLi){
+            getUserLi(value, serchRes);
+        } else serchRes(value);
+
+    }
+
+    document.getElementById('u-name').innerHTML = getCookie();
+
+    const height = document.documentElement.clientHeight;
+    document.getElementById('left').style.height = height - 40 + "px";
+    document.getElementById('right').style.height = height -40 + "px";
+    document.getElementById('rightBefore').style.height = height -40 + "px";
+    document.getElementById('chat').style.height = height - 100 + "px";
+    document.getElementById('left-up').style.height = height - 166 + "px";
+    document.getElementById('searchRes').style.height = height - 166 + "px";
+    document.getElementById('messages').style.height = height - 144 + "px";
+    const block = document.getElementById('messages');
+
+    function scrolldown() {
+        block.scrollTop = block.scrollHeight;
+    }
+
+    let currentChat = '';
+
+    let displayFlag = false;
+
+    function getCookie() {
+        const   matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + 'user'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    };
+
+    const chat = (user2) => {
+        userLi = '';
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const data = JSON.parse(this.responseText);
+
+               document.getElementById("left-up").innerHTML = data[1];
+               document.getElementById("searchField").value = '';
+                document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
+                document.getElementById('left-up').style.display = 'block';
+                document.getElementById('searchRes').style.display = 'none';
+                goToChat(data[0]);
+
+            }
+        };
+        xhr.open('POST', '/index.js?uname='+user2, true);
+        xhr.setRequestHeader('cause', 'chatCreate');
+        xhr.send();
+
+    };
+
+    const goToChat = (chatId) => {
+
+        if (currentChat !== ''){
+            document.getElementById(currentChat).style =
+                document.getElementsByClassName('chatContainer').style;
+        }
+        if (document.getElementById(chatId))document.getElementById(chatId).style.backgroundColor = '#e4eaee';
+
+        currentChat = chatId;
+
+        if(!displayFlag){
+            document.getElementById('right').style.display = 'block';
+            document.getElementById('rightBefore').style.display = 'none';
+            displayFlag = true;
+        }
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const data = JSON.parse(this.responseText);
+                let res = '';
+                for (let i = 0; i<data.length;i++){
+                    res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
+                }
+                document.getElementById('messages').innerHTML = res;
+                window.scrollTo(0, document.body.scrollHeight);
+
+
+            }
+        };
+        xhr.open('POST', '/index.js?chatId='+chatId, true);
+        xhr.setRequestHeader('cause', 'chatOpen');
+        xhr.send();
+    };
+
+    const singOut = () => {
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                location.href = '/login';
+            }
+        };
+        xhr.open('POST', '/logout', true);
+        xhr.send();
+    };
+
+    const socket = io({transports: ['websocket']});
+
+    socket.on('broadcast', function (data) {
+        render(data);
+        scrolldown();
+    });
+
+    socket.on('clear1', function () {
+        document.getElementById('messages').innerHTML = '<div></div>';
+    });
+
+    function sendMessage(nickname, message) {
+
+        if (message === 'clear') {
+            socket.emit('clear');
+
+        }
+
+        else if(nickname && message) {
+            socket.emit('message', {nickname: nickname, message: message, chatId: currentChat});
+        }
+
+    };
+
+
+    function render(data) {
+        if (data.chatId === currentChat) {
+            document.getElementById('messages').innerHTML += '<div>' + data.nickname + ': ' + data.message + '</div>';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    };
+</script>
+</body>
+</html>
