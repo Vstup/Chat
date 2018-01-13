@@ -4,8 +4,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <meta charset="UTF-8">
 
-    <!--<link rel="stylesheet" href="styles/style.css" type="text/css">-->
-    <!--<script src="./scripts/common.js"></script>-->
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -13,10 +11,9 @@
     <style>
         html, body {
             margin: 0;
-            background-color: coral;
+            background-color: #262c31;
             height: 100%;
             padding: 0;
-            overflow: hidden;
         }
 
         .main {
@@ -130,6 +127,8 @@
         #messages {
             overflow: auto;
             padding-left: 10px;
+            padding-right: 10px;
+            line-height: normal;
 
         }
 
@@ -147,16 +146,37 @@
         .chatContainer {
             margin: 0px;
             width: 100%;
-            border-top: 1px solid gray;
-            border-bottom: 1px solid gray;
             height: 75px;
             cursor: pointer;
             text-align: center;
             font-size: large;
+            color: white;
         }
 
         .chatContainer:hover {
+            background-color: #8e9faa;
+        }
+
+        .usersBlock{
+            margin: 0;
+        }
+
+        #right-message {
+            text-align: right;
+            min-height: 40px;
+            margin: 10px auto;
+        }
+
+        #left-message {
+            text-align: left;
+            margin: 25px auto;
+        }
+
+        .message-decor {
+            padding: 10px;
             background-color: #e4eaee;
+            border-radius: 10px;
+            line-height: normal;
         }
 
         #searchContainer{
@@ -218,6 +238,7 @@
 
                 <!--***USER LIST HERE***-->
 
+
                 <!--<hr>-->
 
                 ***USER CHATS HERE***
@@ -256,8 +277,9 @@
     </div>
 </div>
 
-    'use strict';
 <script>
+    'use strict';
+    let nameCheck = getCookie();
     let userLi;
     function getUserLi(value,callback) {
 
@@ -345,6 +367,7 @@
                 document.getElementById('searchRes').style.display = 'none';
                 goToChat(data[0]);
 
+               document.getElementById("left-up").innerHTML = data[0] + data[1];
             }
         };
         xhr.open('POST', '/index.js?uname='+user2, true);
@@ -359,6 +382,7 @@
             document.getElementById(currentChat).style =
                 document.getElementsByClassName('chatContainer').style;
         }
+        document.getElementById(chatId).style.backgroundColor = '#ff5c00';
         if (document.getElementById(chatId))document.getElementById(chatId).style.backgroundColor = '#e4eaee';
 
         currentChat = chatId;
@@ -375,7 +399,14 @@
                 const data = JSON.parse(this.responseText);
                 let res = '';
                 for (let i = 0; i<data.length;i++){
-                    res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
+
+                   // res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
+
+                    if (data[i].userSent == nameCheck) {
+                        res += '<div id="right-message">' + '<span class="message-decor">' + data[i].messText + '</span>' + '</div>\n';
+                    } else {
+                         res += '<div id="left-message">' + '<span class="message-decor">' + data[i].messText + '</span>' + '</div>\n'
+                    }
                 }
                 document.getElementById('messages').innerHTML = res;
                 window.scrollTo(0, document.body.scrollHeight);
@@ -428,7 +459,12 @@
 
     function render(data) {
         if (data.chatId === currentChat) {
-            document.getElementById('messages').innerHTML += '<div>' + data.nickname + ': ' + data.message + '</div>';
+            if (data.nickname == nameCheck) {
+                document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';
+            } else {
+                document.getElementById('messages').innerHTML += '<div id="left-message">' + '<span class="message-decor">' + data.message + '</span>' + '</div>';
+            }
+
             window.scrollTo(0, document.body.scrollHeight);
         }
     };
