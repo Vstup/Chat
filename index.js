@@ -67,11 +67,11 @@ server.on('request', function (req, res) {
 
 
 
-  if (data && funcs.checkSess(req)) {
+  if (data) {
     const uname = data.uname;
     const pass = data.pass;
     const cause = req.headers.cause;
-
+    
     if (cause === 'login') {
       const accsses = funcs.checkPass(uname, pass);
       if (!accsses) res.end('wrong');
@@ -92,9 +92,10 @@ server.on('request', function (req, res) {
       const user1 = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
       funcs.createChat(user1, uname);
       const result = [];
-      const userLi = funcs.generateUserLi(req);
+      // const userLi = funcs.generateUserLi(req);
       const chatLi = funcs.generateChatLi(req);
-      result.push(userLi);
+      const chatId = funcs.getChatId(user1, uname);
+      result.push(chatId);
       result.push(chatLi);
       res.end(JSON.stringify(result));
     }
@@ -104,6 +105,11 @@ server.on('request', function (req, res) {
       const result = funcs.getMessagesFromChat(chatId);
       res.end(JSON.stringify(result));
     }
+
+      if (cause === 'search') {
+          const data = funcs.chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
+          res.end(JSON.stringify(data));
+      }
 
   }
 
