@@ -14,6 +14,7 @@
             background-color: #262c31;
             height: 100%;
             padding: 0;
+            overflow: hidden;
         }
 
         .main {
@@ -47,6 +48,8 @@
             background-color: #505d71;
             height: 100%;
             border-bottom-left-radius: 10px;
+
+
         }
 
         #right {
@@ -64,13 +67,20 @@
 
         }
 
-        .chat-header {
-            border: 3px solid #cfdae1;
+        #chat-header {
+            text-align: center;
+            border-bottom: 2px solid gray;
+            background-color: #505d71;
             padding-top: 10px;
             padding-bottom: 10px;
             padding-left: 10px;
             font-weight: bold;
-            color: #333f4d;
+            color: white;
+            height: 30px;
+            margin: 0px;
+            border-left: 1px solid gray;
+
+
         }
 
         .input-message, .button {
@@ -98,6 +108,7 @@
         #left-up {
             overflow-y: auto;
             overflow-x: hidden;
+            border-right: 1px solid gray;
         }
 
         #left-down {
@@ -106,6 +117,8 @@
             border-bottom-left-radius: 10px;
             color: white;
             text-align: center;
+
+
         }
 
         #u-name {
@@ -151,11 +164,18 @@
             text-align: center;
             font-size: large;
             color: white;
+            border-bottom: 1px solid #8e9faa;
         }
 
         .chatContainer:hover {
             background-color: #8e9faa;
+            color: black;
+
+
         }
+         hr {
+             margin: 0;
+         }
 
         .usersBlock{
             margin: 0;
@@ -182,8 +202,11 @@
         #searchContainer{
             margin: 0px;
             width: 100%;
-            border-bottom: 1px solid gray;
+            border-bottom: 2px solid gray;
             height: 50px;
+            /*border-right: 1px solid gray;*/
+
+
         }
 
         #searchField{
@@ -198,6 +221,8 @@
             display: none;
             overflow-x: hidden;
             overflow-y: auto;
+
+
         }
 
         .searchedItemContainer{
@@ -228,7 +253,7 @@
             <div id="searchContainer">
             <input type="text" id="searchField" onkeyup="search(this.value)" placeholder="search users...">
             </div>
-            <hr>
+
 
             <div id="searchRes">
             <p>No users found</p>
@@ -256,7 +281,8 @@
         </div>
         <div id="right" style="display: none">
             <div id="chat">
-                <div class="chat-header">Chat</div>
+                <div id="chat-header">Chat</div>
+
                 <div id="messages">Messages here</div>
             </div>
             <div class="message">
@@ -332,9 +358,9 @@
     document.getElementById('right').style.height = height -40 + "px";
     document.getElementById('rightBefore').style.height = height -40 + "px";
     document.getElementById('chat').style.height = height - 100 + "px";
-    document.getElementById('left-up').style.height = height - 166 + "px";
+    document.getElementById('left-up').style.height = height - 153 + "px";
     document.getElementById('searchRes').style.height = height - 166 + "px";
-    document.getElementById('messages').style.height = height - 144 + "px";
+    document.getElementById('messages').style.height = height - 153 + "px";
     const block = document.getElementById('messages');
 
     function scrolldown() {
@@ -378,12 +404,17 @@
 
     const goToChat = (chatId) => {
 
+        const userWith = document.getElementById(chatId).innerHTML;
+
+        document.getElementById('chat-header').innerHTML = userWith.replace('<br>','');
+
         if (currentChat !== ''){
             document.getElementById(currentChat).style =
                 document.getElementsByClassName('chatContainer').style;
         }
-        document.getElementById(chatId).style.backgroundColor = '#ff5c00';
-        if (document.getElementById(chatId))document.getElementById(chatId).style.backgroundColor = '#e4eaee';
+//        document.getElementById(chatId).style.backgroundColor = '#ff5c00';
+        document.getElementById(chatId).style.backgroundColor = '#e4eaee';
+        document.getElementById(chatId).style.color = 'black';
 
         currentChat = chatId;
 
