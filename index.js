@@ -37,7 +37,7 @@ server.on('request', function (req, res) {
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path);
-    if (path === '/styles/style.css' || path === '/scripts/common.js'){
+    if (path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
         req.addListener( 'end', function () {
 
             fileServer.serve( req, res );
