@@ -189,7 +189,6 @@ function sendMessage(nickname, message) {
 function render(data) {
     if (data.chatId === currentChat) {
         if (data.nickname == nameCheck) {
-            soundClick();
             document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';
         } else {
             soundClick();
