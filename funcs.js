@@ -163,9 +163,6 @@ const chatCheck = (user) => {
 const generatePage= (req) => {
   let page = fs.readFileSync('public/index.html').toString();
 
-  const userLi = generateUserLi(req);
-  page = page.replace('***USER LIST HERE***', userLi);
-
   const chatLi = generateChatLi(req);
   page = page.replace('***USER CHATS HERE***', chatLi);
 
@@ -187,13 +184,15 @@ const generateUserLi = (req) => {
 
 const generateChatLi = (req) => {
   const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
-  const chats = getChatList(user);
-  const chatUser = getChatUser(user);
+  let chats = getChatList(user).reverse();
+
+  const chatUser = getChatUser(user).reverse();
   let chatLi = '';
 
   for (let i = 0; i < chats.length;i++){
     chatLi += '<div class="chatContainer" id="'+ chats[i] +'" onclick="goToChat(\'' + chats[i] + '\')"><br>' + chatUser[i] + '</div>' ;
   }
+
 
 
   return chatLi;
@@ -210,6 +209,19 @@ const getMessagesFromChat = (chatId) => {
   }
 
   return result;
+};
+
+const getChatId = (user1, user2) => {
+    let res;
+    const chats = JSON.parse(fs.readFileSync('./chats.json'));
+
+    for (let i = 0;i < chats.length;i++){
+        if (chats[i].users[0] === user1 && chats[i].users[1] === user2 ){
+            res = chats[i].chatId;
+        }
+    }
+
+    return res;
 };
 
 module.exports = {
@@ -229,5 +241,7 @@ module.exports = {
   generatePage,
   generateUserLi,
   generateChatLi,
-  getMessagesFromChat
+  getMessagesFromChat,
+  chatCheck,
+  getChatId
 };

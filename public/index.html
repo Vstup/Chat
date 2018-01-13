@@ -99,7 +99,8 @@
         }
 
         #left-up {
-
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         #left-down {
@@ -158,23 +159,66 @@
             background-color: #e4eaee;
         }
 
+        #searchContainer{
+            margin: 0px;
+            width: 100%;
+            border-bottom: 1px solid gray;
+            height: 50px;
+        }
 
+        #searchField{
+            margin-top: 5%;
+            margin-left: 6%;
+            padding: 1%;
+            width: 85%;
+
+        }
+
+        #searchRes {
+            display: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .searchedItemContainer{
+            margin: 0px;
+            width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
+            height: 50px;
+            cursor: pointer;
+            text-align: center;
+            font-size: large;
+        }
+
+        .searchedItemContainer:hover {
+            background-color: #e4eaee;
+        }
     </style>
 
 </head>
 <body>
 
 <div class="main">
-    <div class="header"><p class="brand"><button onclick="singOut()" style="float: left;">Sing Out</button>Telegram for poor</p></div>
+    <div class="header"><p class="brand">
+        <button onclick="singOut()" style="float: left;">Sing Out</button>Telegram for poor</p></div>
     <div class="center">
         <div id="left">
+
+            <div id="searchContainer">
+            <input type="text" id="searchField" onkeyup="search(this.value)" placeholder="search users...">
+            </div>
+            <hr>
+
+            <div id="searchRes">
+            <p>No users found</p>
+            </div>
+
             <div id="left-up">
 
+                <!--***USER LIST HERE***-->
 
-
-                ***USER LIST HERE***
-
-                <hr>
+                <!--<hr>-->
 
                 ***USER CHATS HERE***
 
@@ -212,8 +256,52 @@
     </div>
 </div>
 
-<script>
     'use strict';
+<script>
+    let userLi;
+    function getUserLi(value,callback) {
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                userLi = JSON.parse(this.responseText);
+                console.log('touched')
+                callback(value);
+            }
+        };
+        xhr.open('GET', '/index.js?uname=', true);
+        xhr.setRequestHeader('cause', 'search');
+        xhr.send();
+
+    }
+
+    function serchRes(value) {
+        let res = '';
+        if (value === '') {
+            document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
+            document.getElementById('left-up').style.display = 'block';
+            document.getElementById('searchRes').style.display = 'none';
+        } else {
+
+        for (let i = 0; i < userLi.length; i++) {
+            if (userLi[i].indexOf(value) === 0) {
+                res += '<div class="searchedItemContainer" ' +
+                    'onclick="chat(\'' + userLi[i] + '\')">' + userLi[i] + '</div>\n'
+            }
+        }
+        document.getElementById('searchRes').innerHTML = res;
+        document.getElementById('left-up').style.display = 'none';
+        document.getElementById('searchRes').style.display = 'block';
+    }
+    }
+
+    function search(value) {
+        if (!userLi){
+            getUserLi(value, serchRes);
+        } else serchRes(value);
+
+    }
 
     document.getElementById('u-name').innerHTML = getCookie();
 
@@ -222,7 +310,8 @@
     document.getElementById('right').style.height = height -40 + "px";
     document.getElementById('rightBefore').style.height = height -40 + "px";
     document.getElementById('chat').style.height = height - 100 + "px";
-    document.getElementById('left-up').style.height = height - 100 + "px";
+    document.getElementById('left-up').style.height = height - 166 + "px";
+    document.getElementById('searchRes').style.height = height - 166 + "px";
     document.getElementById('messages').style.height = height - 144 + "px";
     const block = document.getElementById('messages');
 
@@ -242,13 +331,20 @@
     };
 
     const chat = (user2) => {
+        userLi = '';
         const xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 const data = JSON.parse(this.responseText);
-               document.getElementById("left-up").innerHTML = '<button onclick="singOut()">Sing Out</button>' +
-                       data[0] + '<hr>' + data[1];
+
+               document.getElementById("left-up").innerHTML = data[1];
+               document.getElementById("searchField").value = '';
+                document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
+                document.getElementById('left-up').style.display = 'block';
+                document.getElementById('searchRes').style.display = 'none';
+                goToChat(data[0]);
+
             }
         };
         xhr.open('POST', '/index.js?uname='+user2, true);
@@ -263,7 +359,7 @@
             document.getElementById(currentChat).style =
                 document.getElementsByClassName('chatContainer').style;
         }
-        document.getElementById(chatId).style.backgroundColor = '#e4eaee';
+        if (document.getElementById(chatId))document.getElementById(chatId).style.backgroundColor = '#e4eaee';
 
         currentChat = chatId;
 
