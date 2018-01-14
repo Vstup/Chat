@@ -188,6 +188,9 @@ function sendMessage(nickname, message) {
 }
 
 function render(data) {
+
+  // let currentLast = document.getElementById(currentChat).innerHTML;
+  // currentLast = currentLast.getElementById('lastMessage').innerHTML = data.message;
     if (data.chatId === currentChat) {
         if (data.nickname == nameCheck) {
             document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';

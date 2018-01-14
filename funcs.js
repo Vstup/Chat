@@ -1,80 +1,19 @@
 'use strict';
 const fs = require ('fs');
+const auth = require('./server/authorization');
+const sessions = auth.sessions;
+const users = auth.users;
 const token = require('./tokenGenerate');
 const cookie = require('./node-cookie/index');
 
-const users = JSON.parse(fs.readFileSync('users.json'));
-const sessions = JSON.parse(fs.readFileSync('sessions.json'));
-
-
-
-const addUser = (uname, passwd, res) => {
-  if (!users[uname]) users[uname] = passwd;
-  else res.end('There is an user with such a name');
-  fs.writeFileSync('users.json', JSON.stringify(users) );
-};
-
-const checkPass = (uname, passwd) => {
-  return users[uname] === passwd;
-};
-
-const guestSession =  () => {
-  cookie.create(res, 'user', 'guest', 'Hd1eR7v12SdfSGc1');
-};
-
-const userSessionCreate = (uname, res) => {
-  const sesID = getSessID(uname);
-  const tok = token.generateToken;
-  cookie.create(res, 'user', uname, 'Hd1eR7v12SdfSGc1');
-  cookie.create(res, 'sessID', sesID, 'Hd1eR7v12SdfSGc1');
-  cookie.create(res, 'token', tok, 'Hd1eR7v12SdfSGc1');
-  sessions[sesID].active = true;
-  sessions[sesID].token = tok;
-  fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
-
-};
-
-const userSessionDelete = (uname, res) => {
-  const sesID = getSessID(uname);
-  cookie.clear(res, 'user');
-  cookie.clear(res, 'sessID');
-  cookie.clear(res, 'token');
-  sessions[sesID].active = false;
-  sessions[sesID].token = '';
-  fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
-};
-
 const getSessID = (uname) => {
-  for (let key in sessions) if (sessions[key].uname === uname) return key;
-};
-
-const newUserSession = (uname) => {
-  sessions[token.generateSessId] = {active: false, uname: uname, token : ''};
-  fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
+    for (let key in sessions) if (sessions[key].uname === uname) return key;
 };
 
 const getUser = (req) => {
-  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
-  return user;
+    const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
+    return user;
 };
-
-const checkSess = (req) => {
-  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
-
-  if (user) {
-    const sessId = getSessID(user);
-
-    if (!sessions[sessId]) return false;
-
-    const sysTok = sessions[sessId].token;
-    const userTok = cookie.get(req, 'token', 'Hd1eR7v12SdfSGc1');
-
-    if (sessions[sessId].active === true && sysTok === userTok)return true;
-  }
-
-  return false;
-};
-
 
 const messageLog = (user,chatId,text)=>{
   const obj = {};
@@ -99,11 +38,6 @@ const createChat = (user1, user2) => {
   const chats = JSON.parse(fs.readFileSync('./chats.json'));
   chats.push(obj);
   fs.writeFileSync('./chats.json',JSON.stringify(chats));
-};
-
-const getUserList = () =>{
-  const users = JSON.parse(fs.readFileSync('./users.json'));
-  return Object.keys(users);
 };
 
 const clearMessages = () => {
@@ -173,27 +107,7 @@ const generatePage= (req) => {
   return page;
 };
 
-const getChatIds = (users) => {
-
-  const res = [];
-
-}
-
-const generateUserLi = (req) => {
-  const users = chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
-  let userLi = '<ul class="usersBlock">';
-
-  for (let i = 0; i < users.length;i++){
-      userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
-  }
-
-  userLi += '</ul>';
-
-  return userLi;
-};
 const getLastMess = (user, chats) => {
-  // console.log('chats: ' + chats);
-  // console.log('user: ' + user);
     let flag = false;
     const result = {};
     const messages = JSON.parse(fs.readFileSync('./messages.json'));
@@ -211,16 +125,15 @@ const getLastMess = (user, chats) => {
           flag = false;
 
     }}
-    console.log(result)
+    // console.log(result)
     return result;
 
-}
+};
 
-//****************************************************
 const generateChatLi = (req) => {
-  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
+  const user = getUser(req);
   let chats = getChatList(user).reverse();
-    const lastMessages = getLastMess(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'),chats);
+    const lastMessages = getLastMess(user,chats);
   const chatUser = getChatUser(user).reverse();
 
   let chatLi = '';
@@ -228,7 +141,7 @@ let i = 0;
   for (let key in lastMessages){
     chatLi += '<div class="chatContainer" id="'+ key +
 
-        '" onclick="goToChat(\'' + key + '\')"><div id="chatUser">' +
+        '" onclick="goToChat(\'' + key + '\')"><div class="chatUser">' +
 
         chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
   i++;
@@ -264,22 +177,19 @@ const getChatId = (user1, user2) => {
     return res;
 };
 
+const getUserList = () =>{
+    const users = JSON.parse(fs.readFileSync('./users.json'));
+    return Object.keys(users);
+};
+
 module.exports = {
-  checkSess,
   getUser,
-  newUserSession,
   getSessID,
-  userSessionCreate,
-  userSessionDelete,
-  checkPass,
-  addUser,
   messageLog,
   createChat,
-  getUserList,
   getChatList,
   clearMessages,
   generatePage,
-  generateUserLi,
   generateChatLi,
   getMessagesFromChat,
   chatCheck,
