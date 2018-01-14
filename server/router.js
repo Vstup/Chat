@@ -83,25 +83,6 @@ const guest =  function (req, res) {
     const data = url.parse(req.url, true).query;
     const path = url.parse(req.url, true).pathname;
     console.log(path);
-    if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
-        req.addListener( 'end', function () {
-
-            fileServer.serve( req, res );
-
-        } ).resume()
-    }
-
-    if (path ==='/registration'){
-        res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-        res.end(fs.readFileSync('registration.html'));
-    }
-
-    if (path ==='/login'){
-        res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-        res.end(fs.readFileSync('login.html'));
-    }
-
-
     if (data) {
         const uname = data.uname;
         const pass = data.pass;
@@ -122,6 +103,25 @@ const guest =  function (req, res) {
             auth.userSessionCreate(uname, res);
             res.end(fs.readFileSync('public/index.html'));
         }
+
+    if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
+        req.addListener( 'end', function () {
+
+            fileServer.serve( req, res );
+
+        } ).resume()
+    }
+
+    if (path ==='/registration'){
+        // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+        res.end(fs.readFileSync('registration.html'));
+    }else
+    {
+        // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+        res.end(fs.readFileSync('login.html'));
+    }
+
+
 
 
 }};

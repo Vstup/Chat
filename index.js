@@ -30,8 +30,6 @@ server.on('request', function (req, res) {
     router.route(req, res)
   } else {
     router.guest(req, res);
-    /*res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-    res.end(fs.readFileSync('login.html'));*/
   }
 });
 
