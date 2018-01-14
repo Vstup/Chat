@@ -5,10 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>login</title>
+    <link href="./styles/login.css" rel="stylesheet">
     <script>
 
         const singUp = () => {
-//            location.href = 'http://localhost:8082/registration';
             location.href = '/registration';
         };
 
@@ -22,7 +22,6 @@
                     if (this.responseText === 'wrong') alert('wrong uname or pass');
                     document.getElementById('uname').value = '';
                     document.getElementById('pass').value = '';
-//                    location.href = 'http://localhost:8082/home';
                     location.href = '/home';
                 }
             };
@@ -34,16 +33,22 @@
     </script>
 </head>
 <body>
-<form>
-    <input type="text" id="uname">
-    <input type="password" id="pass">
-</form>
-<br>
+<div id="main">
+
+    <form>
+        <input type="text" id="uname"><br>
+        <input type="password" id="pass">
+    </form>
+    <br>
     <button onclick="login()" id="but">Log In</button>
-<br>
-<br>
-<br>
-<button onclick="singUp()">Sind Up</button>
+    <br>
+    <br>
+    <br>
+    <button onclick="singUp()">Sind Up</button>
+
+</div>
+
+
 
 </body>
 </html>

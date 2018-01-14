@@ -140,9 +140,12 @@ const getChatUser = (user) => {
   return res;
 };
 
+
+
 const chatCheck = (user) => {
   let flag = false;
   const res = [];
+
   const users = getUserList();
   const chats = getChatUser(user);
 
@@ -164,33 +167,71 @@ const generatePage= (req) => {
   let page = fs.readFileSync('public/index.html').toString();
 
   const chatLi = generateChatLi(req);
+  console.log(chatLi);
   page = page.replace('***USER CHATS HERE***', chatLi);
 
   return page;
 };
+
+const getChatIds = (users) => {
+
+  const res = [];
+
+}
 
 const generateUserLi = (req) => {
   const users = chatCheck(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'));
   let userLi = '<ul class="usersBlock">';
 
   for (let i = 0; i < users.length;i++){
-    userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
+      userLi += '<li>' + users[i] + '     <button onclick="chat(\'' + users[i] + '\')">Create an chat</button></li>\n';
   }
 
   userLi += '</ul>';
 
   return userLi;
 };
+const getLastMess = (user, chats) => {
+  // console.log('chats: ' + chats);
+  // console.log('user: ' + user);
+    let flag = false;
+    const result = {};
+    const messages = JSON.parse(fs.readFileSync('./messages.json'));
 
+    for (let i = 0; i < chats.length; i++){
+        for (let j = messages.length-1; j > 0;j--){
+
+          if (messages[j].chatId === chats[i]){
+                result[chats[i]] = messages[j].messText ;
+                flag = true;
+                break;
+
+        }
+        if (flag===false) result[chats[i]] = '';
+          flag = false;
+
+    }}
+    console.log(result)
+    return result;
+
+}
+
+//****************************************************
 const generateChatLi = (req) => {
   const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
   let chats = getChatList(user).reverse();
-
+    const lastMessages = getLastMess(cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1'),chats);
   const chatUser = getChatUser(user).reverse();
-  let chatLi = '';
 
-  for (let i = 0; i < chats.length;i++){
-    chatLi += '<div class="chatContainer" id="'+ chats[i] +'" onclick="goToChat(\'' + chats[i] + '\')"><br>' + chatUser[i] + '</div>' ;
+  let chatLi = '';
+let i = 0;
+  for (let key in lastMessages){
+    chatLi += '<div class="chatContainer" id="'+ key +
+
+        '" onclick="goToChat(\'' + key + '\')"><div id="chatUser">' +
+
+        chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
+  i++;
   }
 
 
