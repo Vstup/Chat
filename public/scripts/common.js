@@ -167,6 +167,7 @@ const socket = io({transports: ['websocket']});
 socket.on('broadcast', function (data) {
   render(data);
   scrolldown();
+  document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
 });
 
 socket.on('clear1', function () {
@@ -195,6 +196,22 @@ function render(data) {
             document.getElementById('messages').innerHTML += '<div id="left-message">' + '<span class="message-decor">' + data.message + '</span>' + '</div>';
         };
         window.scrollTo(0, document.body.scrollHeight);
+        console.log(data.chatId);
+        //document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
     }
-
+    document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
 };
+
+
+
+// let chatLi = '';
+// let i = 0;
+// for (let key in lastMessages){
+//   chatLi += '<div class="chatContainer" id="'+ key +
+//
+//     '" onclick="goToChat(\'' + key + '\')"><div id="chatUser">' +
+//
+//     chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
+//   i++;
+// }
+
