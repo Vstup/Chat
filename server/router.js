@@ -5,7 +5,7 @@ const socketio = require('socket.io');
 const url = require('url');
 const cookie = require('../node-cookie/index');
 const stat = require('../node-static/node-static');
-const funcs = require('../funcs');
+const funcs = require('./funcs');
 const auth = require('./authorization');
 
 const server = http.createServer();
@@ -22,7 +22,7 @@ const route =  function (req, res) {
 
     const data = url.parse(req.url, true).query;
     const path = url.parse(req.url, true).pathname;
-    console.log(path)
+    // console.log(path)
     if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
         req.addListener( 'end', function () {
 
@@ -82,7 +82,7 @@ const guest =  function (req, res) {
 
     const data = url.parse(req.url, true).query;
     const path = url.parse(req.url, true).pathname;
-    console.log(path);
+    // console.log(path);
     if (data) {
         const uname = data.uname;
         const pass = data.pass;
@@ -93,7 +93,7 @@ const guest =  function (req, res) {
             if (!accsses) res.end('wrong');
             else {
                 auth.userSessionCreate(uname, res);
-                res.end(fs.readFileSync('public/index.html'));
+                res.end();
             }
         }
 
@@ -101,7 +101,7 @@ const guest =  function (req, res) {
             auth.addUser(uname, pass);
             auth.newUserSession(uname);
             auth.userSessionCreate(uname, res);
-            res.end(fs.readFileSync('public/index.html'));
+            res.end();
         }
 
     if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
@@ -114,11 +114,11 @@ const guest =  function (req, res) {
 
     if (path ==='/registration'){
         // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-        res.end(fs.readFileSync('registration.html'));
+        res.end(fs.readFileSync('public/views/registration.html'));
     }else
     {
         // res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-        res.end(fs.readFileSync('login.html'));
+        res.end(fs.readFileSync('public/views/login.html'));
     }
 
 

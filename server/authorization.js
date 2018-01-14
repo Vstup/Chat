@@ -1,12 +1,12 @@
 'use strict';
 
 const fs = require ('fs');
-const token = require('../tokenGenerate');
+const token = require('./tokenGenerate');
 const cookie = require('../node-cookie/index');
-const funcs = require('../funcs');
+const funcs = require('./funcs');
 
-const users = JSON.parse(fs.readFileSync('users.json'));
-const sessions = JSON.parse(fs.readFileSync('sessions.json'));
+const users = JSON.parse(fs.readFileSync('Data Base/users.json'));
+const sessions = JSON.parse(fs.readFileSync('Data Base/sessions.json'));
 
 const getSessID = (uname) => {
     for (let key in sessions) if (sessions[key].uname === uname) return key;
@@ -20,7 +20,7 @@ const getUser = (req) => {
 const addUser = (uname, passwd, res) => {
     if (!users[uname]) users[uname] = passwd;
     else res.end('There is an user with such a name');
-    fs.writeFileSync('users.json', JSON.stringify(users) );
+    fs.writeFileSync('Data Base/users.json', JSON.stringify(users) );
 };
 
 const checkPass = (uname, passwd) => {
@@ -50,12 +50,12 @@ const userSessionDelete = (uname, res) => {
     cookie.clear(res, 'token');
     sessions[sesID].active = false;
     sessions[sesID].token = '';
-    fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
+    fs.writeFileSync('Data Base/sessions.json', JSON.stringify(sessions) );
 };
 
 const newUserSession = (uname) => {
     sessions[token.generateSessId] = {active: false, uname: uname, token : ''};
-    fs.writeFileSync('sessions.json', JSON.stringify(sessions) );
+    fs.writeFileSync('Data Base/sessions.json', JSON.stringify(sessions) );
 };
 
 const checkSess = (req) => {

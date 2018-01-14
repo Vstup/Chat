@@ -1,10 +1,10 @@
 'use strict';
 const fs = require ('fs');
-const auth = require('./server/authorization');
+const auth = require('./authorization');
 const sessions = auth.sessions;
 const users = auth.users;
 const token = require('./tokenGenerate');
-const cookie = require('./node-cookie/index');
+const cookie = require('../node-cookie/index');
 
 const getSessID = (uname) => {
     for (let key in sessions) if (sessions[key].uname === uname) return key;
@@ -23,9 +23,9 @@ const messageLog = (user,chatId,text)=>{
   obj.userSentId =getSessID(user);
   obj.timeString = new Date().toISOString();
   obj.messText = text;
-  const messages = JSON.parse(fs.readFileSync('./messages.json'));
+  const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
   messages.push(obj);
-  fs.writeFileSync('./messages.json',JSON.stringify(messages));
+  fs.writeFileSync('Data Base/messages.json',JSON.stringify(messages));
 };
 
 const createChat = (user1, user2) => {
@@ -35,19 +35,19 @@ const createChat = (user1, user2) => {
   obj.chatId = '' + id1 + id2;
   obj.users = [user1,user2];
   obj.usersId = [id1,id2];
-  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+  const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
   chats.push(obj);
-  fs.writeFileSync('./chats.json',JSON.stringify(chats));
+  fs.writeFileSync('Data Base/chats.json',JSON.stringify(chats));
 };
 
 const clearMessages = () => {
-  fs.writeFileSync('./messages.json','[]');
+  fs.writeFileSync('Data Base/messages.json','[]');
 };
 
 const getChatList = (user) => {
   const res = [];
   //const id = getSessID(user);
-  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+  const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
   for (let i = 0;i < chats.length;i++){
     if (chats[i].users[0] === user || chats[i].users[1] === user){
@@ -61,7 +61,7 @@ const getChatList = (user) => {
 const getChatUser = (user) => {
   const res = [];
   //const id = getSessID(user);
-  const chats = JSON.parse(fs.readFileSync('./chats.json'));
+  const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
   for (let i = 0;i < chats.length;i++){
     if (chats[i].users[0] === user ){
@@ -98,10 +98,9 @@ const chatCheck = (user) => {
 };
 
 const generatePage= (req) => {
-  let page = fs.readFileSync('public/index.html').toString();
+  let page = fs.readFileSync('public/views/index.html').toString();
 
   const chatLi = generateChatLi(req);
-  console.log(chatLi);
   page = page.replace('***USER CHATS HERE***', chatLi);
 
   return page;
@@ -110,11 +109,17 @@ const generatePage= (req) => {
 const getLastMess = (user, chats) => {
     let flag = false;
     const result = {};
-    const messages = JSON.parse(fs.readFileSync('./messages.json'));
+    const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
+
+    if (messages.length === 0){
+        for (let i = 0; i < chats.length; i++){
+            result[chats[i]] = '';
+        }
+        return result;
+    }
 
     for (let i = 0; i < chats.length; i++){
         for (let j = messages.length-1; j > 0;j--){
-
           if (messages[j].chatId === chats[i]){
                 result[chats[i]] = messages[j].messText ;
                 flag = true;
@@ -125,7 +130,6 @@ const getLastMess = (user, chats) => {
           flag = false;
 
     }}
-    // console.log(result)
     return result;
 
 };
@@ -135,7 +139,6 @@ const generateChatLi = (req) => {
   let chats = getChatList(user).reverse();
     const lastMessages = getLastMess(user,chats);
   const chatUser = getChatUser(user).reverse();
-
   let chatLi = '';
 let i = 0;
   for (let key in lastMessages){
@@ -146,14 +149,12 @@ let i = 0;
         chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
   i++;
   }
-
-
   return chatLi;
 };
 
 const getMessagesFromChat = (chatId) => {
   const result = [];
-  const messages = JSON.parse(fs.readFileSync('./messages.json'));
+  const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
 
   for (let i = 0; i < messages.length;i++){
     if (messages[i].chatId === chatId){
@@ -166,7 +167,7 @@ const getMessagesFromChat = (chatId) => {
 
 const getChatId = (user1, user2) => {
     let res;
-    const chats = JSON.parse(fs.readFileSync('./chats.json'));
+    const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
     for (let i = 0;i < chats.length;i++){
         if (chats[i].users[0] === user1 && chats[i].users[1] === user2 ){
@@ -178,7 +179,7 @@ const getChatId = (user1, user2) => {
 };
 
 const getUserList = () =>{
-    const users = JSON.parse(fs.readFileSync('./users.json'));
+    const users = JSON.parse(fs.readFileSync('Data Base/users.json'));
     return Object.keys(users);
 };
 

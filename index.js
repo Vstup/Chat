@@ -5,7 +5,7 @@ const socketio = require('socket.io');
 const url = require('url');
 const cookie = require('./node-cookie/index');
 const stat = require('./node-static/node-static');
-const funcs = require('./funcs');
+const funcs = require('./server/funcs');
 const auth = require('./server/authorization');
 const router = require('./server/router');
 
@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
 });
 
 server.on('request', function (req, res) {
-  console.log(auth.checkSess(req));
+  // console.log(auth.checkSess(req));
   if (auth.checkSess(req)){
     router.route(req, res)
   } else {
