@@ -65,10 +65,21 @@ body {
   outline: none;
 }
 
-.user-chat {
+.user-chat , .user-chat-container{
   color: white;
-  margin-top: 20px;
+  margin-top: 0px;
   padding: 5px 0;
+}
+
+
+.user-chat-container{
+cursor: pointer;
+}
+
+
+.user-chat-container:hover {
+  color: #424451 ;
+  background-color: #8e9faa;
 }
 
 .circul {
@@ -169,7 +180,7 @@ body {
 
 .search-res {
   display: none;
-  padding-left: 20px;
+  padding-left: 0px;
   color: white;
   font-size: 13pt;
   line-height: 2;
@@ -184,4 +195,16 @@ body {
   width: 50%;
   text-align: center;
   margin-top: 50px;
+}
+
+.searchedItemContainer{
+  padding-left: 20px;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.searchedItemContainer:hover{
+  background-color: #8e9faa;
+  color: #424451;
 }
