@@ -104,7 +104,7 @@ const goToChat = (chatId) => {
 
   if(!displayFlag){
     document.getElementById('messages').style.display = 'block';
-    // document.getElementById('right-footer').style.display = 'none';
+    document.getElementById('right-footer').style.display = 'block';
     displayFlag = true;
   }
   const xhr = new XMLHttpRequest();
