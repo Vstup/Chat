@@ -142,11 +142,11 @@ const generateChatLi = (req) => {
   let chatLi = '';
 let i = 0;
   for (let key in lastMessages){
-    chatLi += '<div class="chatContainer" id="'+ key +
+    chatLi += '<div class="user-chat" id="'+ key +
 
-        '" onclick="goToChat(\'' + key + '\')"><div class="chatUser">' +
+        '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
 
-        chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
+        chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ lastMessages[key] +'</div></div></div></div>' ;
   i++;
   }
   return chatLi;

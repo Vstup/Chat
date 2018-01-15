@@ -1,78 +1,99 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <meta charset="UTF-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./styles/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <link href="./styles/style.css" rel="stylesheet">
-    <script>
-      let audiof = new Audio();
-      function soundClick() {
-        audiof.src = './sounds/message-sound.mp3';
-        audiof.autoplay = true;
-      };
-    </script>
-    <script src="../scripts/common.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TFP</title>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 
 </head>
 <body>
 
 <div class="main">
-    <div class="header"><p class="brand">
-        <button onclick="singOut()" style="float: left;">Sing Out</button>Telegram for poor</p></div>
-    <div class="center">
-        <div id="left">
-
-            <div id="searchContainer">
-            <input type="text" id="searchField" onkeyup="search(this.value)" placeholder="search users...">
-            </div>
-
-
-            <div id="searchRes">
-            <p>No users found</p>
-            </div>
-
-            <div id="left-up">
-
-                ***USER CHATS HERE***
-
-            </div>
-            <div id="left-down">
-                <p id="u-name">User name</p>
-            </div>
-
+  <div class="row row-flex">
+    <div class="hidden-xs col-sm-4 col-md-4 left" id="left">
+      <div class="col-12 search">
+        <span class="search-holder">
+        <input type="text" id="searchField" onkeyup="search(this.value)" placeholder="search users...">
+        </span>
+      </div>
+      <div class="coll-12 search-res" id="search-res">Search res</div>
+      <div class="col-12 users" id="users">
+        <div class="user-chat">
+          ***USER CHATS HERE***
         </div>
-        <div id="rightBefore" >
-            <p id="startMess">Please select a chat to start messaging</p>
-        </div>
-        <div id="right" style="display: none">
-            <div id="chat">
-                <div id="chat-header">Chat</div>
-
-                <div id="messages">Messages here</div>
-            </div>
-            <div class="message">
-                <div class="panel">
-                    <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false; ">
-                        <div class="input-message">
-                            <input type="text" name="message" placeholder="message" autocomplete="off" class="input">
-                        </div>
-                        <div class="button">
-                            <input type="submit" class="submit" value="Send">
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
+      </div>
     </div>
+    <div class="col-xs-12 col-sm-8 col-md-8 right" id="right">
+      <div class="rigt-header">
+        <div class="row row-flex">
+          <div class="right-header-container">
+          <div class="col-xs-4 col-sm-4 col-md-4 padding">
+            <div class="circul text-center">
+            </div>
+          </div>
+          <div class="col-xs-8 col-sm-8 col-md-8 padding user-info">
+            <div class="user-name">Name</div>
+            <div class="user-last-mesasge">Last message</div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="messages" id="messages">
+        <!--<div id="right-message"><div class="right-container">-->
+        <!--</div><div class="clear"></div></div>-->
+        <!--<div id="left-message"><div class="left-container"></div></div>-->
+        <p id="select-chat" class="center-block">Please select a chat to start messaging</p>
+      </div>
+
+      <footer class="right-footer">
+        <div class="right-footer-container">
+          <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false; ">
+            <div>
+              <div class="input-container">
+                <input type="text" name="message" placeholder="message" autocomplete="off" class="input">
+              </div>
+
+              <div class="clear"></div>
+              <div class="submit-container">
+                <input type="submit" class="submit" value="SEND">
+                <div class="clear"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </footer>
+    </div>
+  </div>
 </div>
+
+<script>
+  let height = window.innerHeight;
+  console.log(height);
+  console.log(height + 'px');
+  document.getElementById('left').style.height = height + 'px';
+  document.getElementById('right').style.height = height + 'px';
+  document.getElementById('messages').style.height = height - 200 + 'px';
+    $(window).resize(function() {
+      document.getElementById('left').style.height = $(window).height() + 'px';
+      document.getElementById('right').style.height = $(window).height() + 'px';
+      document.getElementById('messages').style.height = $(window).height() - 200 + 'px';
+
+    });
+
+
+</script>
+
+<script src="../scripts/common.js"></script>
 </body>
 </html>

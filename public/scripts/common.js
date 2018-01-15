@@ -4,14 +4,7 @@ let userLi;
 
 
 window.onload = () => {
-  document.getElementById('u-name').innerHTML = getCookie();
-  document.getElementById('left').style.height = height - 40 + 'px';
-  document.getElementById('right').style.height = height -40 + 'px';
-  document.getElementById('rightBefore').style.height = height -40 + 'px';
-  document.getElementById('chat').style.height = height - 100 + 'px';
-  document.getElementById('left-up').style.height = height - 153 + 'px';
-  document.getElementById('searchRes').style.height = height - 166 + 'px';
-  document.getElementById('messages').style.height = height - 153 + 'px';
+  //document.getElementById('u-name').innerHTML = getCookie();
   const block = document.getElementById('messages');
 
 };
@@ -35,9 +28,9 @@ function getUserLi(value,callback) {
 function serchRes(value) {
   let res = '';
   if (value === '') {
-    document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
-    document.getElementById('left-up').style.display = 'block';
-    document.getElementById('searchRes').style.display = 'none';
+    document.getElementById('search-res').innerHTML = '<p>No users found</p>';
+    document.getElementById('users').style.display = 'block';
+    document.getElementById('search-res').style.display = 'none';
   } else {
 
     for (let i = 0; i < userLi.length; i++) {
@@ -46,9 +39,9 @@ function serchRes(value) {
                     'onclick="chat(\'' + userLi[i] + '\')">' + userLi[i] + '</div>\n';
       }
     }
-    document.getElementById('searchRes').innerHTML = res;
-    document.getElementById('left-up').style.display = 'none';
-    document.getElementById('searchRes').style.display = 'block';
+    document.getElementById('search-res').innerHTML = res;
+    document.getElementById('users').style.display = 'none';
+    document.getElementById('search-res').style.display = 'block';
   }
 }
 
@@ -57,13 +50,6 @@ function search(value) {
     getUserLi(value, serchRes);
   } else serchRes(value);
 
-}
-
-const height = document.documentElement.clientHeight;
-
-
-function scrolldown() {
-  // block.scrollTop = block.scrollHeight;
 }
 
 let currentChat = '';
@@ -85,14 +71,14 @@ const chat = (user2) => {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
 
-      document.getElementById('left-up').innerHTML = data[1];
+      document.getElementById('users').innerHTML = data[1];
       document.getElementById('searchField').value = '';
-      document.getElementById('searchRes').innerHTML = '<p>No users found</p>';
-      document.getElementById('left-up').style.display = 'block';
-      document.getElementById('searchRes').style.display = 'none';
+      document.getElementById('search-res').innerHTML = '<p>No users found</p>';
+      document.getElementById('users').style.display = 'block';
+      document.getElementById('search-res').style.display = 'none';
       goToChat(data[0]);
 
-      document.getElementById('left-up').innerHTML = data[0] + data[1];
+      document.getElementById('users').innerHTML = data[0] + data[1];
     }
   };
   xhr.open('POST', '/index.js?uname='+user2, true);
@@ -105,21 +91,20 @@ const goToChat = (chatId) => {
 
   const userWith = document.getElementById(chatId).innerHTML;
 
-  document.getElementById('chat-header').innerHTML = userWith.replace('<br>','');
+  //document.getElementById('chat-header').innerHTML = userWith.replace('<br>','');
 
   if (currentChat !== ''){
     document.getElementById(currentChat).style =
             document.getElementsByClassName('chatContainer').style;
   }
   //        document.getElementById(chatId).style.backgroundColor = '#ff5c00';
-  document.getElementById(chatId).style.backgroundColor = '#e4eaee';
-  document.getElementById(chatId).style.color = 'black';
+  document.getElementById(chatId).style.backgroundColor = '#656870';
 
   currentChat = chatId;
 
   if(!displayFlag){
-    document.getElementById('right').style.display = 'block';
-    document.getElementById('rightBefore').style.display = 'none';
+    document.getElementById('messages').style.display = 'block';
+    //document.getElementById('rightBefore').style.display = 'none';
     displayFlag = true;
   }
   const xhr = new XMLHttpRequest();
@@ -133,13 +118,12 @@ const goToChat = (chatId) => {
         // res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
 
         if (data[i].userSent == nameCheck) {
-          res += '<div id="right-message">' + '<span class="message-decor">' + data[i].messText + '</span>' + '</div>\n';
+          res += '<div id="right-message">' + '<div class="right-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '</div>';
         } else {
-          res += '<div id="left-message">' + '<span class="message-decor">' + data[i].messText + '</span>' + '</div>\n';
+          res += '<div id="left-message">' + '<div class="left-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '</div>';
         }
       }
       document.getElementById('messages').innerHTML = res;
-      window.scrollTo(0, document.body.scrollHeight);
 
 
     }
@@ -193,16 +177,15 @@ function render(data) {
   // currentLast = currentLast.getElementById('lastMessage').innerHTML = data.message;
     if (data.chatId === currentChat) {
         if (data.nickname == nameCheck) {
-            document.getElementById('messages').innerHTML += '<div id="right-message">' + '<span class="message-decor">' + '<span>' + data.message + '<span>' + '</span>' + '</div>';
+            document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
         } else {
             soundClick();
-            document.getElementById('messages').innerHTML += '<div id="left-message">' + '<span class="message-decor">' + data.message + '</span>' + '</div>';
+            document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
         };
-        window.scrollTo(0, document.body.scrollHeight);
         console.log(data.chatId);
         //document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
     }
-    document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
+    document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
 };
 
 
