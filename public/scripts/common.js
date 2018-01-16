@@ -158,8 +158,7 @@ const socket = io({transports: ['websocket']});
 
 socket.on('broadcast', function (data) {
   render(data);
-  scrolldown();
-  document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
+  //document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
 });
 
 socket.on('clear1', function () {
@@ -187,7 +186,7 @@ function render(data) {
         if (data.nickname == nameCheck) {
             document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
         } else {
-            soundClick();
+           // soundClick();
             document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
         };
         console.log(data.chatId);
