@@ -4,7 +4,6 @@ let userLi;
 
 
 window.onload = () => {
-  //document.getElementById('u-name').innerHTML = getCookie();
   const block = document.getElementById('messages');
 
 };
@@ -34,19 +33,11 @@ function serchRes(value) {
   } else {
 
     userLi.forEach(item => {
-        if (item.indexOf(value) === 0) {
-            res += '<div class="searchedItemContainer" ' +
-                'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
-        }
-    });
-      /*
-    for (let i = 0; i < userLi.length; i++) {
-      if (userLi[i].indexOf(value) === 0) {
+      if (item.indexOf(value) === 0) {
         res += '<div class="searchedItemContainer" ' +
-                    'onclick="chat(\'' + userLi[i] + '\')">' + userLi[i] + '</div>\n';
+                'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
       }
-    }*/
-
+    });
     document.getElementById('search-res').innerHTML = res;
     document.getElementById('users').style.display = 'none';
     document.getElementById('search-res').style.display = 'block';
@@ -99,13 +90,10 @@ const goToChat = (chatId) => {
 
   const userWith = document.getElementById(chatId).innerHTML;
 
-  //document.getElementById('chat-header').innerHTML = userWith.replace('<br>','');
-
   if (currentChat !== ''){
     document.getElementById(currentChat).style =
             document.getElementsByClassName('chatContainer').style;
   }
-  //        document.getElementById(chatId).style.backgroundColor = '#ff5c00';
   document.getElementById(chatId).style.backgroundColor = '#656870';
 
   currentChat = chatId;
@@ -122,8 +110,6 @@ const goToChat = (chatId) => {
       const data = JSON.parse(this.responseText);
       let res = '';
       for (let i = 0; i<data.length;i++){
-
-        // res += '<div>' + data[i].userSent + ': ' + data[i].messText + '</div>\n';
 
         if (data[i].userSent == nameCheck) {
           res += '<div id="right-message">' + '<div class="right-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '</div>';
@@ -158,7 +144,6 @@ const socket = io({transports: ['websocket']});
 
 socket.on('broadcast', function (data) {
   render(data);
-  //document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
 });
 
 socket.on('clear1', function () {
@@ -180,31 +165,15 @@ function sendMessage(nickname, message) {
 
 function render(data) {
 
-  // let currentLast = document.getElementById(currentChat).innerHTML;
-  // currentLast = currentLast.getElementById('lastMessage').innerHTML = data.message;
-    if (data.chatId === currentChat) {
-        if (data.nickname == nameCheck) {
-            document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
-        } else {
-           // soundClick();
-            document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
-        };
-        console.log(data.chatId);
-        //document.getElementById(data.chatId).getElementsByTagName('DIV')[1].innerHTML = data.message;
+  if (data.chatId === currentChat) {
+    if (data.nickname == nameCheck) {
+      document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
+    } else {
+      document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
     }
-    document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
-};
+    console.log(data.chatId);
+  }
+  document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
+}
 
-
-
-// let chatLi = '';
-// let i = 0;
-// for (let key in lastMessages){
-//   chatLi += '<div class="chatContainer" id="'+ key +
-//
-//     '" onclick="goToChat(\'' + key + '\')"><div id="chatUser">' +
-//
-//     chatUser[i] + '</div><div id="lastMessage">'+ lastMessages[key] +'</div></div>' ;
-//   i++;
-// }
 

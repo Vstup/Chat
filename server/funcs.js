@@ -7,12 +7,12 @@ const token = require('./tokenGenerate');
 const cookie = require('../node-cookie/index');
 
 const getSessID = (uname) => {
-    for (let key in sessions) if (sessions[key].uname === uname) return key;
+  for (let key in sessions) if (sessions[key].uname === uname) return key;
 };
 
 const getUser = (req) => {
-    const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
-    return user;
+  const user = cookie.get(req, 'user', 'Hd1eR7v12SdfSGc1');
+  return user;
 };
 
 const messageLog = (user,chatId,text)=>{
@@ -62,11 +62,11 @@ const getChatUser = (user) => {
   const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
   chats.forEach(item => {
-      if (item.users[0] === user ){
-          res.push(item.users[1]);
-      }else if (item.users[1] === user){
-          res.push(item.users[0]);
-      }
+    if (item.users[0] === user ){
+      res.push(item.users[1]);
+    }else if (item.users[1] === user){
+      res.push(item.users[0]);
+    }
   });
   return res;
 };
@@ -102,28 +102,28 @@ const generatePage= (req) => {
 };
 
 const getLastMess = (user, chats) => {
-    let flag = false;
-    const result = {};
-    const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
+  let flag = false;
+  const result = {};
+  const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
 
-    if (messages.length === 0){
-        chats.forEach(item => {result[item] = ''});
-        return result;
-    }
+  if (messages.length === 0){
+    chats.forEach(item => {result[item] = '';});
+    return result;
+  }
 
-    for (let i = 0; i < chats.length; i++){
-        for (let j = messages.length-1; j > 0;j--){
-          if (messages[j].chatId === chats[i]){
-                result[chats[i]] = messages[j].messText ;
-                flag = true;
-                break;
+  for (let i = 0; i < chats.length; i++){
+    for (let j = messages.length-1; j > 0;j--){
+      if (messages[j].chatId === chats[i]){
+        result[chats[i]] = messages[j].messText ;
+        flag = true;
+        break;
 
-        }
-        if (flag===false) result[chats[i]] = '';
-          flag = false;
+      }
+      if (flag===false) result[chats[i]] = '';
+      flag = false;
 
     }}
-    return result;
+  return result;
 
 };
 
@@ -140,7 +140,7 @@ const generateChatLi = (req) => {
         '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
 
         chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ lastMessages[key] +'</div></div></div></div>' ;
-  i++;
+    i++;
   }
   return chatLi;
 };
@@ -149,27 +149,27 @@ const getMessagesFromChat = (chatId) => {
   const result = [];
   const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
 
-  messages.forEach(item => {if (item.chatId === chatId) result.push(item) });
+  messages.forEach(item => {if (item.chatId === chatId) result.push(item); });
 
   return result;
 };
 
 const getChatId = (user1, user2) => {
-    let res;
-    const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
+  let res;
+  const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
-    chats.forEach(item => {
-        if (item.users[0] === user1 && item.users[1] === user2 ){
-            res = item.chatId;
-        }
-    });
+  chats.forEach(item => {
+    if (item.users[0] === user1 && item.users[1] === user2 ){
+      res = item.chatId;
+    }
+  });
 
-    return res;
+  return res;
 };
 
 const getUserList = () =>{
-    const users = JSON.parse(fs.readFileSync('Data Base/users.json'));
-    return Object.keys(users);
+  const users = JSON.parse(fs.readFileSync('Data Base/users.json'));
+  return Object.keys(users);
 };
 
 module.exports = {
