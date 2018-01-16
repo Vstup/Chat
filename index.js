@@ -25,7 +25,6 @@ io.on('connection', function (socket) {
 });
 
 server.on('request', function (req, res) {
-  // console.log(auth.checkSess(req));
   if (auth.checkSess(req)){
     router.route(req, res)
   } else {

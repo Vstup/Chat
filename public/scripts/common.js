@@ -33,12 +33,20 @@ function serchRes(value) {
     document.getElementById('search-res').style.display = 'none';
   } else {
 
+    userLi.forEach(item => {
+        if (item.indexOf(value) === 0) {
+            res += '<div class="searchedItemContainer" ' +
+                'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
+        }
+    });
+      /*
     for (let i = 0; i < userLi.length; i++) {
       if (userLi[i].indexOf(value) === 0) {
         res += '<div class="searchedItemContainer" ' +
                     'onclick="chat(\'' + userLi[i] + '\')">' + userLi[i] + '</div>\n';
       }
-    }
+    }*/
+
     document.getElementById('search-res').innerHTML = res;
     document.getElementById('users').style.display = 'none';
     document.getElementById('search-res').style.display = 'block';
@@ -78,7 +86,7 @@ const chat = (user2) => {
       document.getElementById('search-res').style.display = 'none';
       goToChat(data[0]);
 
-      document.getElementById('users').innerHTML = data[0] + data[1];
+      document.getElementById('users').innerHTML = data[1];
     }
   };
   xhr.open('POST', '/index.js?uname='+user2, true);

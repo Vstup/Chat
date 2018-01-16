@@ -46,35 +46,30 @@ const clearMessages = () => {
 
 const getChatList = (user) => {
   const res = [];
-  //const id = getSessID(user);
   const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
-  for (let i = 0;i < chats.length;i++){
-    if (chats[i].users[0] === user || chats[i].users[1] === user){
-      res.push(chats[i].chatId);
+  chats.forEach(item => {
+    if (item.users[0] === user ||item.users[1] === user){
+      res.push(item.chatId);
     }
-  }
+  });
 
   return res;
 };
 
 const getChatUser = (user) => {
   const res = [];
-  //const id = getSessID(user);
   const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
-  for (let i = 0;i < chats.length;i++){
-    if (chats[i].users[0] === user ){
-      res.push(chats[i].users[1]);
-    }else if (chats[i].users[1] === user){
-      res.push(chats[i].users[0]);
-    }
-  }
-
+  chats.forEach(item => {
+      if (item.users[0] === user ){
+          res.push(item.users[1]);
+      }else if (item.users[1] === user){
+          res.push(item.users[0]);
+      }
+  });
   return res;
 };
-
-
 
 const chatCheck = (user) => {
   let flag = false;
@@ -112,9 +107,7 @@ const getLastMess = (user, chats) => {
     const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
 
     if (messages.length === 0){
-        for (let i = 0; i < chats.length; i++){
-            result[chats[i]] = '';
-        }
+        chats.forEach(item => {result[item] = ''});
         return result;
     }
 
@@ -137,10 +130,10 @@ const getLastMess = (user, chats) => {
 const generateChatLi = (req) => {
   const user = getUser(req);
   let chats = getChatList(user).reverse();
-    const lastMessages = getLastMess(user,chats);
+  const lastMessages = getLastMess(user,chats);
   const chatUser = getChatUser(user).reverse();
   let chatLi = '';
-let i = 0;
+  let i = 0;
   for (let key in lastMessages){
     chatLi += '<div class="user-chat-container" id="'+ key +
 
@@ -156,11 +149,7 @@ const getMessagesFromChat = (chatId) => {
   const result = [];
   const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
 
-  for (let i = 0; i < messages.length;i++){
-    if (messages[i].chatId === chatId){
-      result.push(messages[i]);
-    }
-  }
+  messages.forEach(item => {if (item.chatId === chatId) result.push(item) });
 
   return result;
 };
@@ -169,11 +158,11 @@ const getChatId = (user1, user2) => {
     let res;
     const chats = JSON.parse(fs.readFileSync('Data Base/chats.json'));
 
-    for (let i = 0;i < chats.length;i++){
-        if (chats[i].users[0] === user1 && chats[i].users[1] === user2 ){
-            res = chats[i].chatId;
+    chats.forEach(item => {
+        if (item.users[0] === user1 && item.users[1] === user2 ){
+            res = item.chatId;
         }
-    }
+    });
 
     return res;
 };

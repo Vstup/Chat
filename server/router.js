@@ -83,7 +83,7 @@ const guest =  function (req, res) {
     const data = url.parse(req.url, true).query;
     const path = url.parse(req.url, true).pathname;
     // console.log(path);
-    if (data) {
+        if (data) {
         const uname = data.uname;
         const pass = data.pass;
         const cause = req.headers.cause;
