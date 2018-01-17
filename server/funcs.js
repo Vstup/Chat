@@ -105,7 +105,7 @@ const getLastMess = (user, chats) => {
   let flag = false;
   const result = {};
   const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
-
+  console.log(messages);
   if (messages.length === 0){
     chats.forEach(item => {result[item] = '';});
     return result;
@@ -118,11 +118,12 @@ const getLastMess = (user, chats) => {
         flag = true;
         break;
 
-      }
+      }}
       if (flag===false) result[chats[i]] = '';
+      console.log('flag: ' + flag)
       flag = false;
 
-    }}
+    }
   return result;
 
 };
@@ -130,10 +131,14 @@ const getLastMess = (user, chats) => {
 const generateChatLi = (req) => {
   const user = getUser(req);
   let chats = getChatList(user).reverse();
+  // console.log(chats);
+  // console.log(user);
   const lastMessages = getLastMess(user,chats);
   const chatUser = getChatUser(user).reverse();
   let chatLi = '';
   let i = 0;
+  // console.log(chatUser);
+  // console.log(lastMessages);
   for (let key in lastMessages){
     chatLi += '<div class="user-chat-container" id="'+ key +
 
