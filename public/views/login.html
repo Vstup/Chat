@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>login</title>
-    <link href="./styles/login.css" rel="stylesheet">
+    <!--<link href="./styles/login.css" rel="stylesheet">-->
     <script>
 
         const singUp = () => {
@@ -31,24 +31,90 @@
             xhr.send();
         }
     </script>
+    <style>
+      html {
+      }
+      body {
+        background-color: #bdd3e1 !important;
+        margin: 0;
+
+      }
+      #main {
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #424451;
+        border-radius: 5px;
+        margin-top: 30vh;
+      }
+
+      .sub-main {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        width: 200px;
+        margin: 0 auto;
+      }
+
+      .but {
+        padding: 15px;
+        border-radius: 5px;
+        border: 0;
+        background-color: white;
+        font-weight: bold;
+        color: #424451;
+      }
+
+      .butt-container {
+        margin-top: 20px;
+      }
+
+      .but-right {
+        float: right;
+      }
+      .but:active {
+        border: 0;
+        outline: none;
+      }
+
+      .input-holder {
+        width: 100%;
+      }
+      .input {
+        width: 190px;
+        padding: 10px 5px;
+        margin-top: 10px;
+        border: 0;
+        font-size: 10pt;
+      }
+      .input:active {
+        border: 0;
+        outline: none;
+      }
+    </style>
 </head>
 <body>
 <div id="main">
-
+  <div class="sub-main">
     <form>
-        <input type="text" id="uname"><br>
-        <input type="password" id="pass">
+      <div class="input-holder">
+        <input type="text" id="uname" placeholder="LOGIN" class="input"><br>
+        <input type="password" id="pass" placeholder="PASSWORD" class="input">
+      </div>
     </form>
-    <br>
-    <button onclick="login()" id="but">Log In</button>
-    <br>
-    <br>
-    <br>
-    <button onclick="singUp()">Sind Up</button>
-
+    <div class="butt-container">
+      <button onclick="login()" id="but" class="but">Log In</button>
+      <button onclick="singUp()" class="but but-right">Sind Up</button>
+    </div>
+  </div>
 </div>
 
-
+<script>
+  let height = window.innerHeight;
+  document.getElementById('main').style.margin-top = height/2 + 'px';
+  //$(window).resize(function() {
+    //document.getElementById('left').style.height = $(window).height() + 'px';
+  //});
+</script>
 
 </body>
 </html>
