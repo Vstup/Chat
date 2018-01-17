@@ -119,6 +119,7 @@ const goToChat = (chatId) => {
       }
       document.getElementById('messages').innerHTML = res;
 
+      scrollDown();
 
     }
   };
@@ -162,6 +163,12 @@ function sendMessage(nickname, message) {
   }
 
 }
+const block = document.getElementById('messages');
+function  scrollDown() {
+  // window.scrollTo(0, document.getElementById('messages').scrollHeight);
+  block.scrollTop = block.scrollHeight;
+  console.log('check');
+}
 
 function render(data) {
 
@@ -172,6 +179,7 @@ function render(data) {
       document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
     }
     console.log(data.chatId);
+    scrollDown();
   }
   document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
 }
