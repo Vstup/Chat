@@ -76,6 +76,7 @@ const chat = (user2) => {
       document.getElementById('search-res').style.display = 'none';
 
 
+      
    let chatLi = '';
    let i = 0;
    for (let key in data[1]){
