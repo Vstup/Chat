@@ -1,6 +1,7 @@
 body {
   background-color: #bdd3e1 !important;
   margin-bottom: 60px;
+  overflow: hidden;
 }
 
 .row {
@@ -114,6 +115,7 @@ cursor: pointer;
 
 .messages {
   overflow: auto;
+  overflow-x: hidden;
 }
 
 #left-message {

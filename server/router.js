@@ -23,7 +23,7 @@ const route =  function (req, res) {
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path)
-  if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
+  if ( path === '/styles/loginStyles.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
     req.addListener( 'end', function () {
 
       fileServer.serve( req, res );
@@ -86,6 +86,7 @@ const guest =  function (req, res) {
   if (data) {
     const uname = data.uname;
     const pass = data.pass;
+    const email = data.email;
     const cause = req.headers.cause;
 
     if (cause === 'login') {
@@ -98,17 +99,16 @@ const guest =  function (req, res) {
     }
 
     if (cause === 'register') {
-      auth.addUser(uname, pass);
+      auth.addUser(uname, pass, email,res);
       auth.newUserSession(uname);
       auth.userSessionCreate(uname, res);
       res.end();
     }
 
-    if ( path === '/styles/login.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
+    if ( path === '/styles/loginStyles.css'){
       req.addListener( 'end', function () {
-
-        fileServer.serve( req, res );
-
+        fileServer.serve(req, res, ()=>{
+        });
       } ).resume();
     }
 

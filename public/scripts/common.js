@@ -111,9 +111,9 @@ const goToChat = (chatId) => {
       for (let i = 0; i<data.length;i++){
 
         if (data[i].userSent == nameCheck) {
-          res += '<div id="right-message">' + '<div class="right-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '</div>';
+          res += '<div id="right-message">' + '<div class="right-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
         } else {
-          res += '<div id="left-message">' + '<div class="left-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '</div>';
+          res += '<div id="left-message">' + '<div class="left-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
         }
       }
       document.getElementById('messages').innerHTML = res;
