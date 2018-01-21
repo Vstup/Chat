@@ -228,8 +228,9 @@ cursor: pointer;
   font-weight: normal;
   font-size: 9pt;
   width: 100px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  /*word-wrap: break-word;*/
+  /*overflow-wrap: break-word;*/
+  word-break: break-all;
   overflow-y: hidden;
   height: 28px;
   float: left;
@@ -248,6 +249,8 @@ cursor: pointer;
   position: absolute;
   z-index: -100;
   font-size: 9pt;
+  max-width: 150px;
+  overflow: hidden;
 }
 
 .small-menu {
