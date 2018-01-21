@@ -23,7 +23,7 @@ const route =  function (req, res) {
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path)
-  if ( path === '/styles/loginStyles.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path === '/sounds/message-sound.mp3'){
+  if ( path === '/styles/loginStyles.css' || path === '/styles/style.css' || path === '/scripts/common.js' || path == '/scripts/pageCrafter.js'|| path === '/sounds/message-sound.mp3'){
     req.addListener( 'end', function () {
 
       fileServer.serve( req, res );

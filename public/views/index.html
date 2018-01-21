@@ -3,6 +3,7 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -12,14 +13,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="./styles/style.css">
-
-
-
-
-
 </head>
-<body>
 
+<body>
 <div class="main">
   <div class="row row-flex">
     <div class="hidden-xs col-sm-4 col-md-4 left" id="left">
@@ -84,48 +80,8 @@
   </div>
 </div>
 
-
-<script>
-  let height = window.innerHeight;
-  console.log(height);
-  console.log(height + 'px');
-  document.getElementById('left').style.height = height + 'px';
-  document.getElementById('right').style.height = height + 'px';
-  document.getElementById('messages').style.height = height - 200 + 'px';
-  $(window).resize(function() {
-      document.getElementById('left').style.height = $(window).height() + 'px';
-      document.getElementById('right').style.height = $(window).height() + 'px';
-      document.getElementById('messages').style.height = $(window).height() - 200 + 'px';
-
-    });
-
-  const textarea = document.getElementById('input-area');
-  textarea.addEventListener('keydown', function(event) {
-    if (event.keyCode == 13 && !event.shiftKey && this.value !== '\\n') {
-      event.preventDefault();
-      this.value = this.value.replace(/\n/g, '<br />')
-      sendMessage(getCookie(), this.value);
-      this.value = '';
-    } else if (this.value === '\\n'){
-      this.value = '';
-    }
-   });
-  textarea.addEventListener("keydown", function(event) {
-    if (event.keyCode == 13 && event.shiftKey) {
-      console.log(this.value)
-    }
-  });
-
-  function drawMenu () {
-    document.getElementById('left').className = 'col-sm-4 col-md-4 left drawmenu';
-  };
-
-  function hideMenu() {
-    document.getElementById('left').className = 'hidden-xs col-sm-4 col-md-4 left';
-  };
-
-</script>
-
+<script src="../scripts/pageCrafter.js"></script>
 <script src="../scripts/common.js"></script>
+
 </body>
 </html>
