@@ -151,7 +151,6 @@ const generateChatLi = (req) => {
 const getMessagesFromChat = (chatId) => {
   const result = [];
   const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
-
   messages.forEach(item => {if (item.chatId === chatId) result.push(item); });
 
   return result;

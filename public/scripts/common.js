@@ -169,7 +169,6 @@ function  scrollDown() {
 }
 
 function render(data) {
-
   if (data.chatId === currentChat) {
     if (data.nickname == nameCheck) {
       document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
