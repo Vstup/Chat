@@ -137,14 +137,12 @@ const generateChatLi = (req) => {
   const chatUser = getChatUser(user).reverse();
   let chatLi = '';
   let i = 0;
-  // console.log(chatUser);
-  // console.log(lastMessages);
   for (let key in lastMessages){
     chatLi += '<div class="user-chat-container" id="'+ key +
 
         '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
 
-        chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ lastMessages[key] +'</div></div></div></div>' ;
+        chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' + lastMessages[key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div></div></div>' ;
     i++;
   }
   return chatLi;

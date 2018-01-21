@@ -5,7 +5,6 @@ let userLi;
 
 window.onload = () => {
   const block = document.getElementById('messages');
-
 };
 function getUserLi(value,callback) {
 
@@ -120,6 +119,7 @@ const goToChat = (chatId) => {
       document.getElementById('messages').innerHTML = res;
 
       scrollDown();
+      hideMenu();
 
     }
   };
@@ -165,9 +165,7 @@ function sendMessage(nickname, message) {
 }
 const block = document.getElementById('messages');
 function  scrollDown() {
-  // window.scrollTo(0, document.getElementById('messages').scrollHeight);
   block.scrollTop = block.scrollHeight;
-  console.log('check');
 }
 
 function render(data) {
@@ -181,7 +179,16 @@ function render(data) {
     console.log(data.chatId);
     scrollDown();
   }
-  document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = data.message;
-}
+  document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = '<span id="last-msg-cut">' + data.message + '</span>';
+
+  document.getElementById('last-message-cut-check').innerHTML = '<span id="last-msg-cut-check">' + data.message + '</span>';
+  let lastMsgCutCheck = document.getElementById('last-msg-cut-check').offsetWidth;
+  if (lastMsgCutCheck > 100) {
+    document.getElementById(data.chatId + 1).style.display = 'inline';
+    console.log(lastMsgCutCheck);
+  } else {
+    document.getElementById(data.chatId + 1).style.display = 'none';
+  }
+};
 
 

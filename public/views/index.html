@@ -33,35 +33,41 @@
           ***USER CHATS HERE***
         </div>
       </div>
+      <div id="last-message-cut-check"></div>
     </div>
+
     <div class="col-xs-12 col-sm-8 col-md-8 right" id="right">
       <div class="rigt-header">
         <div class="row row-flex">
           <div class="right-header-container">
-          <div class="col-xs-4 col-sm-4 col-md-4 padding">
-            <div class="circul text-center">
+            <div class="col-xs-1 visible-xs padding" id="mini-menu"><span onclick="drawMenu()" class="glyphicon glyphicon-align-justify
+ small-menu"></span></div>
+            <div class="col-md-12 col-sm-12  col-xs-11 padding"  onclick="hideMenu()">
+              <div class="col-xs-4 col-sm-3 col-md-3 padding">
+                <div class="circul text-center">
+                </div>
+              </div>
+              <div class="col-xs-8 col-sm-9 col-md-9 padding user-info">
+                <div class="user-name">Name</div>
+                <div class="user-last-mesasge">Last message</div>
+              </div>
             </div>
-          </div>
-          <div class="col-xs-8 col-sm-8 col-md-8 padding user-info">
-            <div class="user-name">Name</div>
-            <div class="user-last-mesasge">Last message</div>
-          </div>
           </div>
         </div>
       </div>
-      <div class="messages" id="messages">
+      <div class="messages" id="messages"  onclick="hideMenu()">
         <!--<div id="right-message"><div class="right-container">-->
         <!--</div><div class="clear"></div></div>-->
         <!--<div id="left-message"><div class="left-container"></div></div>-->
         <p id="select-chat" class="center-block">Please select a chat to start messaging</p>
       </div>
 
-      <footer class="right-footer" id="right-footer">
+      <footer class="right-footer" id="right-footer"  onclick="hideMenu()">
         <div class="right-footer-container">
-          <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false; ">
+          <form  onsubmit = "sendMessage(getCookie(), this.message.value); this.message.value = ''; return false; " id="msg-send">
             <div>
               <div class="input-container">
-                <input type="text" name="message" placeholder="message" autocomplete="off" class="input">
+                <textarea wrap="soft" form="msg-send" name="message" class="input" id="input-area"  rows="1" cols="1" style="resize: none !important;" autofocus></textarea>
               </div>
 
               <div class="clear"></div>
@@ -84,13 +90,37 @@
   document.getElementById('left').style.height = height + 'px';
   document.getElementById('right').style.height = height + 'px';
   document.getElementById('messages').style.height = height - 200 + 'px';
-    $(window).resize(function() {
+  $(window).resize(function() {
       document.getElementById('left').style.height = $(window).height() + 'px';
       document.getElementById('right').style.height = $(window).height() + 'px';
       document.getElementById('messages').style.height = $(window).height() - 200 + 'px';
 
     });
 
+  const textarea = document.getElementById('input-area');
+  textarea.addEventListener('keydown', function(event) {
+    if (event.keyCode == 13 && !event.shiftKey && this.value !== '\\n') {
+      event.preventDefault();
+      this.value = this.value.replace(/\n/g, '<br />')
+      sendMessage(getCookie(), this.value);
+      this.value = '';
+    } else if (this.value === '\\n'){
+      this.value = '';
+    }
+   });
+  textarea.addEventListener("keydown", function(event) {
+    if (event.keyCode == 13 && event.shiftKey) {
+      console.log(this.value)
+    }
+  });
+
+  function drawMenu () {
+    document.getElementById('left').className = 'col-sm-4 col-md-4 left drawmenu';
+  };
+
+  function hideMenu() {
+    document.getElementById('left').className = 'hidden-xs col-sm-4 col-md-4 left';
+  };
 
 </script>
 
