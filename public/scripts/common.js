@@ -74,9 +74,22 @@ const chat = (user2) => {
       document.getElementById('search-res').innerHTML = '<p>No users found</p>';
       document.getElementById('users').style.display = 'block';
       document.getElementById('search-res').style.display = 'none';
-      goToChat(data[0]);
 
-      document.getElementById('users').innerHTML = data[1];
+
+   let chatLi = '';
+   let i = 0;
+   for (let key in data[1]){
+     chatLi += '<div class="user-chat-container" id="'+ key +
+
+         '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
+
+         data[2][i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' + data[1][key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div></div></div>' ;
+     i++;
+   }
+
+
+      document.getElementById('users').innerHTML = chatLi;
+        goToChat(data[0]);
     }
   };
   xhr.open('POST', '/index.js?uname='+user2, true);

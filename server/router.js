@@ -55,10 +55,11 @@ const route =  function (req, res) {
       const user1 = funcs.getUser(req);
       funcs.createChat(user1, uname);
       const result = [];
-      const chatLi = funcs.generateChatLi(req);
+      const chatLi = funcs.getChatLi(req);
       const chatId = funcs.getChatId(user1, uname);
       result.push(chatId);
-      result.push(chatLi);
+      result.push(chatLi[0]);
+      result.push(chatLi[1]);
       res.end(JSON.stringify(result));
     }
 

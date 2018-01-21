@@ -105,7 +105,7 @@ const getLastMess = (user, chats) => {
   let flag = false;
   const result = {};
   const messages = JSON.parse(fs.readFileSync('Data Base/messages.json'));
-  console.log(messages);
+  // console.log(messages);
   if (messages.length === 0){
     chats.forEach(item => {result[item] = '';});
     return result;
@@ -120,7 +120,7 @@ const getLastMess = (user, chats) => {
 
       }}
       if (flag===false) result[chats[i]] = '';
-      console.log('flag: ' + flag)
+      //console.log('flag: ' + flag)
       flag = false;
 
     }
@@ -146,6 +146,20 @@ const generateChatLi = (req) => {
     i++;
   }
   return chatLi;
+};
+
+const getChatLi = (req) => {
+  const user = getUser(req);
+  let chats = getChatList(user).reverse();
+  // console.log(chats);
+  // console.log(user);
+  const lastMessages = getLastMess(user,chats);
+  const chatUser = getChatUser(user).reverse();
+
+  const res =[];
+  res.push(lastMessages);
+  res.push(chatUser);
+  return res;
 };
 
 const getMessagesFromChat = (chatId) => {
@@ -185,7 +199,8 @@ module.exports = {
   generateChatLi,
   getMessagesFromChat,
   chatCheck,
-  getChatId
+  getChatId,
+  getChatLi
 };
 
 
