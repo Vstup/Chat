@@ -2,10 +2,14 @@
 let nameCheck = getCookie();
 let userLi;
 
+function getBlock(id) {
+  return document.getElementById(id);
+}
 
 window.onload = () => {
-  const block = document.getElementById('messages');
+  const block = getBlock('messages');
 };
+
 function getUserLi(value,callback) {
 
   const xhr = new XMLHttpRequest();
@@ -26,20 +30,20 @@ function getUserLi(value,callback) {
 function serchRes(value) {
   let res = '';
   if (value === '') {
-    document.getElementById('search-res').innerHTML = '<p>No users found</p>';
-    document.getElementById('users').style.display = 'block';
-    document.getElementById('search-res').style.display = 'none';
+    getBlock('search-res').innerHTML = '<p>No users found</p>';
+    getBlock('users').style.display = 'block';
+    getBlock('search-res').style.display = 'none';
   } else {
 
     userLi.forEach(item => {
       if (item.indexOf(value) === 0) {
-        res += '<div class="searchedItemContainer" ' +
-                'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
-      }
-    });
-    document.getElementById('search-res').innerHTML = res;
-    document.getElementById('users').style.display = 'none';
-    document.getElementById('search-res').style.display = 'block';
+      res += '<div class="searchedItemContainer" ' +
+        'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
+    }
+  });
+    getBlock('search-res').innerHTML = res;
+    getBlock('users').style.display = 'none';
+    getBlock('search-res').style.display = 'block';
   }
 }
 
@@ -69,28 +73,28 @@ const chat = (user2) => {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
 
-      document.getElementById('users').innerHTML = data[1];
-      document.getElementById('searchField').value = '';
-      document.getElementById('search-res').innerHTML = '<p>No users found</p>';
-      document.getElementById('users').style.display = 'block';
-      document.getElementById('search-res').style.display = 'none';
+      getBlock('users').innerHTML = data[1];
+      getBlock('searchField').value = '';
+      getBlock('search-res').innerHTML = '<p>No users found</p>';
+      getBlock('users').style.display = 'block';
+      getBlock('search-res').style.display = 'none';
 
 
 
-   let chatLi = '';
-   let i = 0;
-   for (let key in data[1]){
-     chatLi += '<div class="user-chat-container" id="'+ key +
+      let chatLi = '';
+      let i = 0;
+      for (let key in data[1]){
+        chatLi += '<div class="user-chat-container" id="'+ key +
 
-         '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
+          '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
 
-         data[2][i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' + data[1][key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div></div></div>' ;
-     i++;
-   }
+          data[2][i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' + data[1][key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div></div></div>' ;
+        i++;
+      }
 
 
-      document.getElementById('users').innerHTML = chatLi;
-        goToChat(data[0]);
+      getBlock('users').innerHTML = chatLi;
+      goToChat(data[0]);
     }
   };
   xhr.open('POST', '/index.js?uname='+user2, true);
@@ -101,19 +105,19 @@ const chat = (user2) => {
 
 const goToChat = (chatId) => {
 
-  const userWith = document.getElementById(chatId).innerHTML;
+  const userWith = getBlock(chatId).innerHTML;
 
   if (currentChat !== ''){
-    document.getElementById(currentChat).style =
-            document.getElementsByClassName('chatContainer').style;
+    getBlock(currentChat).style =
+      document.getElementsByClassName('chatContainer').style;
   }
-  document.getElementById(chatId).style.backgroundColor = '#656870';
+  getBlock(chatId).style.backgroundColor = '#656870';
 
   currentChat = chatId;
 
   if(!displayFlag){
-    document.getElementById('messages').style.display = 'block';
-    document.getElementById('right-footer').style.display = 'block';
+    getBlock('messages').style.display = 'block';
+    getBlock('right-footer').style.display = 'block';
     displayFlag = true;
   }
   const xhr = new XMLHttpRequest();
@@ -130,7 +134,7 @@ const goToChat = (chatId) => {
           res += '<div id="left-message">' + '<div class="left-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
         }
       }
-      document.getElementById('messages').innerHTML = res;
+      getBlock('messages').innerHTML = res;
 
       scrollDown();
       hideMenu();
@@ -162,7 +166,7 @@ socket.on('broadcast', function (data) {
 });
 
 socket.on('clear1', function () {
-  document.getElementById('messages').innerHTML = '<div></div>';
+  getBlock('messages').innerHTML = '<div></div>';
 });
 
 function sendMessage(nickname, message) {
@@ -177,7 +181,7 @@ function sendMessage(nickname, message) {
   }
 
 }
-const block = document.getElementById('messages');
+const block = getBlock('messages');
 function  scrollDown() {
   block.scrollTop = block.scrollHeight;
 }
@@ -185,23 +189,21 @@ function  scrollDown() {
 function render(data) {
   if (data.chatId === currentChat) {
     if (data.nickname == nameCheck) {
-      document.getElementById('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
+      getBlock('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
     } else {
-      document.getElementById('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
+      getBlock('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
     }
     console.log(data.chatId);
     scrollDown();
   }
-  document.getElementById(data.chatId).getElementsByTagName('DIV')[5].innerHTML = '<span id="last-msg-cut">' + data.message + '</span>';
+  getBlock(data.chatId).getElementsByTagName('DIV')[5].innerHTML = '<span id="last-msg-cut">' + data.message + '</span>';
 
-  document.getElementById('last-message-cut-check').innerHTML = '<span id="last-msg-cut-check">' + data.message + '</span>';
-  let lastMsgCutCheck = document.getElementById('last-msg-cut-check').offsetWidth;
+  getBlock('last-message-cut-check').innerHTML = '<span id="last-msg-cut-check">' + data.message + '</span>';
+  let lastMsgCutCheck = getBlock('last-msg-cut-check').offsetWidth;
   if (lastMsgCutCheck > 100) {
-    document.getElementById(data.chatId + 1).style.display = 'inline';
+    getBlock(data.chatId + 1).style.display = 'inline';
     console.log(lastMsgCutCheck);
   } else {
-    document.getElementById(data.chatId + 1).style.display = 'none';
+    getBlock(data.chatId + 1).style.display = 'none';
   }
 };
-
-

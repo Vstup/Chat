@@ -145,6 +145,8 @@ cursor: pointer;
   background-color: #739f61;
   border-radius: 10px;
   float: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .input, .submit {
