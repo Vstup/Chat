@@ -17,14 +17,16 @@ const getUser = (req) => {
   return user;
 };
 
-const addUser = (uname, passwd, res) => {
-  if (!users[uname]) users[uname] = passwd;
+const addUser = (uname, passwd,email , res) => {
+  if (!users[uname]) {
+    users[uname] = {pass:passwd, email:email}
+  }
   else res.end('There is an user with such a name');
   fs.writeFileSync('Data Base/users.json', JSON.stringify(users) );
 };
 
 const checkPass = (uname, passwd) => {
-  return users[uname] === passwd;
+  return users[uname].pass === passwd;
 };
 
 const guestSession =  () => {

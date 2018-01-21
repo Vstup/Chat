@@ -7,23 +7,32 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>registration</title>
     <script>
-        const singUp = () => {
-            const uname = document.getElementById('uname').value;
-            const pass = document.getElementById('pass').value;
+        const signUp = () => {
+            let uname = document.getElementById('uname').value;
+            let pass = document.getElementById('pass').value;
+            let email = document.getElementById('email').value;
+            let passRepeat = document.getElementById('passRepeat').value;
 
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById('uname').value = '';
-                    document.getElementById('pass').value = '';
+            if(passRepeat === pass) {
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+//                        document.getElementById('uname').value = '';
+//                        document.getElementById('pass').value = '';
 //                    location.href = 'http://localhost:8082/home';
-                    location.href = '/home';
-                }
-            };
+                        location.href = '/home';
+                    }
+                };
 
-            xhr.open('POST', 'main.js?uname=' + uname + '&pass=' + pass, true);
-            xhr.setRequestHeader('cause', 'register');
-            xhr.send();
+                xhr.open('POST', 'main.js?uname=' + uname + '&pass=' + pass + '&email=' + email, true);
+                xhr.setRequestHeader('cause', 'register');
+                xhr.send();
+
+            } else {
+                pass = '';
+                passRepeat = '';
+                alert('Введені паролі не співпадають!\nСпробуйте ще раз!')
+            }
         }
     </script>
     <style>
@@ -94,7 +103,9 @@
         <form>
             <div class="input-holder">
                 <input type="text" id="uname" placeholder="LOGIN" class="input"><br>
+                <input type="email" id="email" placeholder="EMAIL" class="input"><br>
                 <input type="password" id="pass" placeholder="PASSWORD" class="input">
+                <input type="password" id="passRepeat" placeholder="REPEAT PASSWORD" class="input">
             </div>
         </form>
         <div class="butt-container">
