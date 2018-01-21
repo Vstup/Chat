@@ -17,6 +17,7 @@ const getUser = (req) => {
   return user;
 };
 
+
 const addUser = (uname, passwd,email , res) => {
   if (!users[uname]) {
     users[uname] = {pass:passwd, email:email}
