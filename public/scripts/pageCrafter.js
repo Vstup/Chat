@@ -20,7 +20,7 @@ const textarea = getBlock('input-area');
 
 textarea.onkeydown = function(event) {
   const reBegin = /^(\n)/;
-  const reEnd = /(\n)$/
+  const reEnd = /(\n)$/;
   //let asf = re.test(this.value + '');
   //console.log(asf);
   if (event.keyCode == 13 && !event.shiftKey) {
@@ -29,7 +29,7 @@ textarea.onkeydown = function(event) {
         this.value = this.value.replace(/(\n)*/, '');
       };
     if (reEnd.test(this.value + '')) {
-      this.value = this.value.replace(/(\n)$/, '');
+      this.value = this.value.replace(/(\n)*$/, '');
     };
     console.log(this.value);
     this.value = this.value.replace(/\n/g, '<br />');
