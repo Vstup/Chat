@@ -9,15 +9,10 @@ const funcs = require('./funcs');
 const auth = require('./authorization');
 const token = require('./tokenGenerate');
 
-const server = http.createServer();
-const io = socketio(server);
-const port = 8080;
-
 const fileServer = new stat.Server( './public/', {
   cache: 3600,
   gzip: true
 } );
-
 
 const route =  function (req, res) {
 
