@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "exit 0",
-    "install": "npm install socket.io;npm install cookie;npm install cookie-signature ;npm install simple-encryptor",
+    "install": "npm install socket.io;npm install cookie;npm install cookie-signature ;npm install simple-encryptor;npm install mongodb",
     "start": "node index.js"
   },
   "author": "Misha",
