@@ -8,7 +8,7 @@ const db =require('./server/db');
 
 const server = http.createServer();
 const io = socketio(server);
-const port = 8081;
+const port = 8080;
 
 io.on('connection', function (socket) {
   socket.on('message', function (data) {
