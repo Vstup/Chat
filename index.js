@@ -12,8 +12,14 @@ const port = 8080;
 
 io.on('connection', function (socket) {
   socket.on('message', function (data) {
-    io.emit('broadcast', data);
-    funcs.messageLog(data.nickname,data.chatId,data.message);
+    funcs.messageLog(
+        data.nickname,
+        data.chatId,
+        data.message,
+        data.time
+        );
+    data.time = funcs.returnTime(data.time);
+      io.emit('broadcast', data);
   });
   socket.on('clear', function () {
     io.emit('clear1' );
@@ -30,6 +36,7 @@ server.on('request', function (req, res) {
 server.listen(port, function () {
   console.log('Server running');
   db.dbConnect();
+
 });
 
 

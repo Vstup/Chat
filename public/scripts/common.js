@@ -36,10 +36,11 @@ function serchRes(value) {
   } else {
 
     userLi.forEach(item => {
+      if(item){
       if (item.indexOf(value) === 0) {
       res += '<div class="searchedItemContainer" ' +
         'onclick="chat(\'' + item + '\')">' + item + '</div>\n';
-    }
+    }}
   });
     getBlock('search-res').innerHTML = res;
     getBlock('users').style.display = 'none';
@@ -129,9 +130,13 @@ const goToChat = (chatId) => {
       for (let i = 0; i<data.length;i++){
 
         if (data[i].userSent == nameCheck) {
-          res += '<div id="right-message">' + '<div class="right-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
+          res += '<div id="right-message">' + '<div class="right-container">' +
+          data[i].messText + '<div class="messTime">'+data[i].time+'</div>' +
+          '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
         } else {
-          res += '<div id="left-message">' + '<div class="left-container">' + data[i].messText + '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
+          res += '<div id="left-message">' + '<div class="left-container">' +
+          data[i].messText + '<div class="messTime">'+data[i].time+'</div>' +
+          '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
         }
       }
       getBlock('messages').innerHTML = res;
@@ -145,6 +150,20 @@ const goToChat = (chatId) => {
   xhr.setRequestHeader('cause', 'chatOpen');
   xhr.send();
 };
+
+const returnTime = (timeString) => {
+    function adZero(time) {
+        return time<10 ? '0'+time:time;
+    }
+
+    const h = adZero(new Date(timeString).getHours());
+    const m = adZero(new Date(timeString).getMinutes());
+
+    const result = h + ':' + m;
+    console.log(result)
+    return result;
+};
+
 
 const singOut = () => {
 
@@ -177,7 +196,9 @@ function sendMessage(nickname, message) {
   }
 
   else if(nickname && message) {
-    socket.emit('message', {nickname: nickname, message: message, chatId: currentChat});
+    console.log('currChat   ' + currentChat);
+    socket.emit('message', {nickname: nickname, message: message, chatId: currentChat, time: new Date().toISOString()
+    });
   }
 
 }
@@ -189,9 +210,16 @@ function  scrollDown() {
 function render(data) {
   if (data.chatId === currentChat) {
     if (data.nickname == nameCheck) {
-      getBlock('messages').innerHTML += '<div id="right-message">' + '<div class="right-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
+      getBlock('messages').innerHTML += '<div id="right-message">' +
+          '<div class="right-container">' + data.message +
+          '<div class="messTime">'+data.time+'</div>' +
+          '</div>' + '<div class="clear"></div></div>';
     } else {
-      getBlock('messages').innerHTML += '<div id="left-message">' + '<div class="left-container">' + data.message + '</div>' + '<div class="clear"></div>' + '</div>';
+      getBlock('messages').innerHTML += '<div id="left-message">' +
+          '<div class="left-container">' + data.message +
+          '<div class="messTime">'+data.time+'</div>' +
+          '</div>' +
+          '<div class="clear"></div></div>';
     }
     console.log(data.chatId);
     scrollDown();
@@ -206,11 +234,14 @@ function render(data) {
   } else {
     getBlock(data.chatId + 1).style.display = 'none';
   }
- 
 };
 
+
+///************
+
+
 function getBlock(id) {
-  return document.getElementById(id);
+    return document.getElementById(id);
 };
 
 let height = window.innerHeight;
@@ -219,38 +250,38 @@ getBlock('right').style.height = height + 'px';
 getBlock('messages').style.height = height - 200 + 'px';
 
 $(window).resize(function() {
-  getBlock('left').style.height = $(window).height() + 'px';
-  getBlock('right').style.height = $(window).height() + 'px';
-  getBlock('messages').style.height = $(window).height() - 200 + 'px';
+    getBlock('left').style.height = $(window).height() + 'px';
+    getBlock('right').style.height = $(window).height() + 'px';
+    getBlock('messages').style.height = $(window).height() - 200 + 'px';
 
 });
 
 const textarea = getBlock('input-area');
 
 textarea.onkeydown = function(event) {
-  const reBegin = /^(\n)/;
-  const reEnd = /(\n)$/;
-  //let asf = re.test(this.value + '');
-  //console.log(asf);
-  if (event.keyCode == 13 && !event.shiftKey) {
-    event.preventDefault();
-    if (reBegin.test(this.value + '')) {
-        this.value = this.value.replace(/(\n)*/, '');
-      };
-    if (reEnd.test(this.value + '')) {
-      this.value = this.value.replace(/(\n)*$/, '');
-    };
-    console.log(this.value);
-    this.value = this.value.replace(/\n/g, '<br />');
-    sendMessage(getCookie(), this.value);
-    this.value = '';
-}};
+    const reBegin = /^(\n)/;
+    const reEnd = /(\n)$/;
+    //let asf = re.test(this.value + '');
+    //console.log(asf);
+    if (event.keyCode == 13 && !event.shiftKey) {
+        event.preventDefault();
+        if (reBegin.test(this.value + '')) {
+            this.value = this.value.replace(/(\n)*/, '');
+        };
+        if (reEnd.test(this.value + '')) {
+            this.value = this.value.replace(/(\n)*$/, '');
+        };
+        console.log(this.value);
+        this.value = this.value.replace(/\n/g, '<br />');
+        sendMessage(getCookie(), this.value);
+        this.value = '';
+    }};
 
 
 function drawMenu () {
-  document.getElementById('left').className = 'col-sm-4 col-md-4 left drawmenu';
+    document.getElementById('left').className = 'col-sm-4 col-md-4 left drawmenu';
 };
 
 function hideMenu() {
-  document.getElementById('left').className = 'hidden-xs col-sm-4 col-md-4 left';
+    document.getElementById('left').className = 'hidden-xs col-sm-4 col-md-4 left';
 };

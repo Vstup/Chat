@@ -9,13 +9,18 @@ const funcs = require('./funcs');
 const auth = require('./authorization');
 const token = require('./tokenGenerate');
 
+const server = http.createServer();
+const io = socketio(server);
+const port = 8080;
+
 const fileServer = new stat.Server( './public/', {
   cache: 3600,
   gzip: true
 } );
 
-const route =  function (req, res) {
 
+const route =  function (req, res) {
+    // fileServer.serve( req, res );
   const data = url.parse(req.url, true).query;
   const path = url.parse(req.url, true).pathname;
   // console.log(path)
@@ -26,7 +31,6 @@ const route =  function (req, res) {
 
     } ).resume();
   }
-
   if (path === '/' || path === '/home' ) {
 
     res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});

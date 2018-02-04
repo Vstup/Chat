@@ -6,10 +6,10 @@ const cookie = require('../node-cookie/index');
 const db = require ('./db');
 
 const getSessID = (res,uname, callback) => {
-  console.log(uname);
+  // console.log(uname);
   db.chatdb.collection('sessions').findOne({uname:uname},function(err, result) {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
     callback(result._id);
   });
 };
@@ -19,14 +19,15 @@ const getUser = (req) => {
   return user;
 };
 
-const messageLog = (user,chatId,text)=> {
+const messageLog = (user,chatId,text,time)=> {
   getSessID('', user, (sessId) => {
     db.chatdb.collection('messages').insertOne({
       messId: token.generateSessId,
       chatId: chatId,
       userSent: user,
       userSentId: sessId,
-      timeString: new Date().toISOString(),
+      timeString: time,
+      time:returnTime(time),
       messText: text
     }, function (err, result) {
       if (err) throw err;
@@ -37,12 +38,12 @@ const messageLog = (user,chatId,text)=> {
 
 
 const createChat = (res,user1, user2,callback) => {
-  console.log('user1: ' + user1);
-  console.log('user2: ' + user2);
+  // console.log('user1: ' + user1);
+  // console.log('user2: ' + user2);
   getSessID(res,user1,(id1)=>{
-    console.log('id1: ' + id1);
+    // console.log('id1: ' + id1);
     getSessID(res,user2,(id2)=>{
-      console.log('id2: ' + id2);
+      // console.log('id2: ' + id2);
       db.chatdb.collection('chats').insertOne({
         chatId : '' + id1 + id2,
         users : [user1,user2],
@@ -163,10 +164,12 @@ const generateChatLi = (req,callback) => {
 
         for (let key in lastMessages){
           chatLi += '<div class="user-chat-container" id="'+ key +
-
-                  '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex"><div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center"></div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
-
-                  chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' + lastMessages[key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div></div></div>' ;
+              '" onclick="goToChat(\'' + key + '\')"><div class="row row-flex">'+
+              '<div class="col-xs-4 col-sm-4 col-md-4 padding"><div class="circul text-center">'+
+              '</div></div><div class="col-xs-8 col-sm-8 col-md-8 padding user-info"><div class="user-name">' +
+               chatUser[i] + '</div><div class="user-last-mesasge" id="lastMessage">'+ '<span id="last-msg-cut">' +
+              lastMessages[key] + '</span>' +'</div><span class="last-msg-dot" id="' + key + 1 + '">...</span></div>'+
+              '</div></div>' ;
           i++;
         }
         callback(chatLi);
@@ -193,6 +196,7 @@ const getChatLi = (req,callback) => {
 
 const getMessagesFromChat = (res,chatId,callback) => {
   db.chatdb.collection('messages').find({chatId:chatId}).toArray(function (err,result) {
+   // console.log(result);
     callback(result);
   });
 };
@@ -220,6 +224,21 @@ const getUserList = (callback) =>{
   });
 };
 
+
+const returnTime = (timeString) => {
+    function adZero(time) {
+       return time<10 ? '0'+time:time;
+        }
+
+    const h = adZero(new Date(timeString).getHours());
+    const m = adZero(new Date(timeString).getMinutes());
+
+    const result = h + ':' + m;
+    // console.log(result)
+    return result;
+};
+
+
 module.exports = {
   getUser,
   getSessID,
@@ -232,7 +251,8 @@ module.exports = {
   getMessagesFromChat,
   chatCheck,
   getChatId,
-  getChatLi
+  getChatLi,
+  returnTime
 };
 
 
