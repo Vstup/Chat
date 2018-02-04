@@ -1,7 +1,7 @@
 'use strict';
 const MongoClient = require('mongodb').MongoClient;
 // const url = "mongodb://localhost/mydb";
-const url = "mongodb://admin:admin@172.30.78.118/chatdb";
+const url = "mongodb://admin:admin@172.31.22.176/chatdb";
 let chatdb;
 
 
