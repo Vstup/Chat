@@ -267,3 +267,19 @@ cursor: pointer;
   position: fixed!important;
   z-index: 100;
 }
+
+.singOut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+
+.singOut button {
+
+  background-color: #424451;
+  color: white;
+  border-radius: 5px;
+  border: 0;
+  padding: 5px;
+}
