@@ -131,12 +131,12 @@ const goToChat = (chatId) => {
 
         if (data[i].userSent == nameCheck) {
           res += '<div id="right-message">' + '<div class="right-container">' +
-          data[i].messText + '<div class="messTime">'+data[i].time+'</div>' +
-          '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
+          data[i].messText + '<span class="messTime">'+data[i].time+'</span>' +
+          '</div>' + '<div class="clear"></div>';
         } else {
           res += '<div id="left-message">' + '<div class="left-container">' +
-          data[i].messText + '<div class="messTime">'+data[i].time+'</div>' +
-          '</div>' + '<div class="clear"></div>' + '<div class="messTime">'+'</div></div>';
+          data[i].messText + '<span class="messTime">'+data[i].time+'</span>' +
+          '</div>' + '<div class="clear"></div>';
         }
       }
       getBlock('messages').innerHTML = res;
@@ -212,12 +212,12 @@ function render(data) {
     if (data.nickname == nameCheck) {
       getBlock('messages').innerHTML += '<div id="right-message">' +
           '<div class="right-container">' + data.message +
-          '<div class="messTime">'+data.time+'</div>' +
+          '<span class="messTime">'+data.time+'</span>' +
           '</div>' + '<div class="clear"></div></div>';
     } else {
       getBlock('messages').innerHTML += '<div id="left-message">' +
           '<div class="left-container">' + data.message +
-          '<div class="messTime">'+data.time+'</div>' +
+          '<span class="messTime">'+data.time+'</span>' +
           '</div>' +
           '<div class="clear"></div></div>';
     }
